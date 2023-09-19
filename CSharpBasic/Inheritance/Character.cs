@@ -63,6 +63,10 @@ namespace Inheritance
         //                                Public Methods
         //================================================================================
 
+        // 추상함수 :
+        // 숨쉬기라는 기능 자체는 필요한데 어떻게 동작할지는 잘 모르겠으니까 상속받은애들이 알아서 구현해
+        public abstract void Breath();
+             
         public float GetExp() 
         {
             return _exp; 
@@ -76,9 +80,12 @@ namespace Inheritance
             _exp = value;
         }
 
-        public void Jump()
+        // virtual 가상 키워드
+        // 가상함수 테이블에 이 함수 추가함
+        public virtual void Jump()
         {
             Console.WriteLine("Jump!");
+            // todo -> Add force 5 upward
         }
 
         public void Attack(IHp target)

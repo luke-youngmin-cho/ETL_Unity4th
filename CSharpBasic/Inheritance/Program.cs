@@ -14,6 +14,7 @@
             // 공변성
             // 하위타입을 기반타입으로 참조할 수 있는 성질
             Character player = warrior1;
+            player.Breath();
             IHp target = goblin1;
 
             player.Attack(target);
