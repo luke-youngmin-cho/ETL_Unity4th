@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpBasic", "CSharpBasic\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inheritance", "Inheritance\Inheritance.csproj", "{4E03A690-3D6E-4591-9FE9-057772901EE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delegates", "Delegates\Delegates.csproj", "{FA739C47-D9A0-4E09-8A75-2A84864D2826}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Delegates", "Delegates\Delegates.csproj", "{FA739C47-D9A0-4E09-8A75-2A84864D2826}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boxing", "Boxing\Boxing.csproj", "{ED098D7F-63B7-404E-927E-9A2DB9A20D7A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{FA739C47-D9A0-4E09-8A75-2A84864D2826}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA739C47-D9A0-4E09-8A75-2A84864D2826}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA739C47-D9A0-4E09-8A75-2A84864D2826}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED098D7F-63B7-404E-927E-9A2DB9A20D7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED098D7F-63B7-404E-927E-9A2DB9A20D7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED098D7F-63B7-404E-927E-9A2DB9A20D7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED098D7F-63B7-404E-927E-9A2DB9A20D7A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
