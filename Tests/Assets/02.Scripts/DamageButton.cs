@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class DamageButton : MonoBehaviour
 {
@@ -12,7 +14,7 @@ public class DamageButton : MonoBehaviour
         _button.onClick.AddListener(DepletePlayerHP5);
         // 람다식 (익명함수) 
         // 컴파일러가 판단 할 수 있는 부분들을 생략하고 이름을 사용하지 않는 형태의 함수식
-        _button.onClick.AddListener(() => _player.hp -= 5.0f);
+        _button.onClick.AddListener(() => _player.hp -= Random.Range(2.0f, 5.0f));
     }
 
     private void DepletePlayerHP5()

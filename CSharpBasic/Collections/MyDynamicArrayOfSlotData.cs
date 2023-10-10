@@ -2,13 +2,11 @@
 
 namespace Collections
 {
-    internal class MyDynamicArray<T> : IEnumerable<T>
-        where T : IComparable<T> 
-        //  where 제한자 : 타입을 제한하는 한정자 (T 에 넣을 타입은 IComparable<T> 로 공변 가능해야한다)
+    internal class MyDynamicArrayOfSlotData : IEnumerable<SlotData>
     {
         // 인덱스 탐색 
         // O(1)
-        public T this[int index]
+        public SlotData this[int index]
         {
             get
             {
@@ -39,7 +37,7 @@ namespace Collections
 
         private int _count;
         private const int DEFAULT_SIZE = 1;
-        private T[] _items = new T[DEFAULT_SIZE];
+        private SlotData[] _items = new SlotData[DEFAULT_SIZE];
 
         // 아이템 삽입
         // 시간복잡도 : O(N)
@@ -48,11 +46,11 @@ namespace Collections
         // 아이템들을 복제해야하므로 자료개수에 비례한 연산이 필요하다.
         //
         // 공간복잡도 : O(N)
-        public void Add(T item)
+        public void Add(SlotData item)
         {
             if (_count >= _items.Length)
             {
-                T[] tmp = new T[_count * 2];
+                SlotData[] tmp = new SlotData[_count * 2];
                 Array.Copy(_items, tmp, _count);
                 _items = tmp;
             }
