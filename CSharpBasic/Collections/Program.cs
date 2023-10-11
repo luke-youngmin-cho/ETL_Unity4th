@@ -227,6 +227,21 @@ namespace Collections
             if (stack.Peek() > 0)
                 stack.Pop();
             #endregion
+
+            #region Linked List
+            MyLinkedList<int> linkedList = new MyLinkedList<int>();
+            linkedList.AddFirst(3);
+            linkedList.AddFirst(4);
+            Console.WriteLine(linkedList.Find(x => x > 0).Value);
+            linkedList.Find(1);
+            linkedList.Find(x => x > 0);
+
+            #endregion
+
+            #region Hashtable
+            MyHashtable<string, float> myHashtable = new MyHashtable<string, float>();
+            #endregion
+
         }
     }
 }
