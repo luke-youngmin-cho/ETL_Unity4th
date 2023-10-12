@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,7 +26,7 @@ namespace Collections
         }
     }
 
-    internal class MyHashtable<TKey, TValue>
+    internal class MyHashtable<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>
         where TKey : IEquatable<TKey>
         where TValue : IEquatable<TValue>
     {
@@ -107,7 +108,7 @@ namespace Collections
             // 해당 인덱스에 버킷이 없으면 새로 만듬
             if (bucket == null)
             {
-                _buckets[index] = new List<KeyValuePair<TKey, TValue>>();
+                bucket = _buckets[index] = new List<KeyValuePair<TKey, TValue>>();
                 _validIndexList.Add(index);
             }
             else
@@ -168,13 +169,28 @@ namespace Collections
             return false;
         }
 
-        // 숙 제 
         public bool Remove(TKey key)
         {
             // 1. 해시 ID 구해서 버킷 찾음
+            int index = Hash(key);
+            var bucket = _buckets[index];
             // 2. 버킷에서 내가 원하는 key 와 동일한 KeyValuePair 있는지 확인
-            // 3. 있으면 해당 KeyValuePair 를 버킷에서 삭제 
-            // 4. 삭제했는데 만약 현재 버킷의 아이템 개수가 0개면 유효한인덱스리스트에서 해당 인덱스 제거
+            for (int i = 0; i < bucket.Count; i++)
+            {
+                if (bucket[i].Equals(key))
+                {
+                    // 3. 있으면 해당 KeyValuePair 를 버킷에서 삭제 
+                    bucket.RemoveAt(i);
+                    // 4. 삭제했는데 만약 현재 버킷의 아이템 개수가 0개면 유효한인덱스리스트에서 해당 인덱스 제거
+                    if (bucket.Count == 0)
+                    {
+                        _validIndexList.Remove(index);
+                    }
+
+                    return true;
+                }
+            }
+            return false;
         }
 
         public int Hash(TKey key)
@@ -189,8 +205,61 @@ namespace Collections
             return result;
         }
 
-        // 숙 제 
-        // Enumerator 구현
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
+        {
+            return new Enumerator(this);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return new Enumerator(this);
+        }
+
+        public struct Enumerator : IEnumerator<KeyValuePair<TKey, TValue>>
+        {
+            public KeyValuePair<TKey, TValue> Current => _data._buckets[_data._validIndexList[_validIndex]][_itemIndex];
+
+            object IEnumerator.Current => _data._buckets[_data._validIndexList[_validIndex]][_itemIndex];
+
+            private MyHashtable<TKey, TValue> _data;
+            private int _validIndex; // 현재 몇번째 버킷인지
+            private int _itemIndex; // 현재 버킷에서 몇번째 아이템인지
+
+            public Enumerator(MyHashtable<TKey, TValue> data)
+            {
+                _data = data;
+                _validIndex = 0;
+                _itemIndex = -1;
+            }
+
+            public void Dispose()
+            {
+            }
+
+            public bool MoveNext()
+            {
+                // 끝까지 이미 탐색 다했으면 탐색안됨
+                // (버킷인덱스가 초과했으면)
+                if (_validIndex > _data._validIndexList.Count - 1)
+                    return false;
+
+                _itemIndex++; // 다음 아이템으로
+                // 아이템 인덱스 초과시
+                if (_itemIndex > _data._buckets[_data._validIndexList[_validIndex]].Count - 1)
+                {
+                    _validIndex++; // 다음 버킷으로
+                    _itemIndex = 0; // 넘어간 버킷의 첫번째 아이템으로
+                }
+
+                return _validIndex < _data._validIndexList.Count; // 다음 아이템 유효한지
+            }
+
+            public void Reset()
+            {
+                _validIndex = 0;
+                _itemIndex = -1;
+            }
+        }
     }
 
 }

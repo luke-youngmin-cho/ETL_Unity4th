@@ -58,7 +58,7 @@ namespace Collections
 
             for (int i = 0; i < 10; i++)
             {
-                inventory.Add(new SlotData(0, 0));                
+                inventory.Add(new SlotData(0, 0));
             }
 
             inventory[0] = new SlotData((int)ItemID.RedPotion, 40);
@@ -71,7 +71,7 @@ namespace Collections
                 Console.WriteLine($"슬롯 {i} : [{(ItemID)((SlotData)inventory[i]).id}] , [{((SlotData)inventory[i]).num}]");
             }
 
-            
+
             // todo -> 파란포션 5개를 획득
             // 1. 파란포션 5개가 들어갈 수 있는 슬롯을 찾아야함. 
             int availableSlotIndex = inventory.FindIndex(slotData => ((SlotData)slotData).isEmpty ||
@@ -93,7 +93,7 @@ namespace Collections
 
             MyDynamicArray<SlotData> inventory2 = new MyDynamicArray<SlotData>();
 
-            if (inventory2.Remove(new SlotData(0,0)))
+            if (inventory2.Remove(new SlotData(0, 0)))
             {
                 Console.WriteLine("지워질리가없는데 이게...");
             }
@@ -154,14 +154,14 @@ namespace Collections
             foreach (var item in inventory2)
             {
                 Console.WriteLine((ItemID)item.id);
-                inventory2[0] = new SlotData(0,0); // 이런거(순회중에 콜렉션 수정) 하믄 안댐 
+                inventory2[0] = new SlotData(0, 0); // 이런거(순회중에 콜렉션 수정) 하믄 안댐 
             }
 
             // 둘 이상의 콜렉션 순회
             MyDynamicArray<SlotData> inventory1 = new MyDynamicArray<SlotData>();
-            inventory1.Add(new SlotData(0,0));
-            inventory1.Add(new SlotData(0,0));
-            inventory1.Add(new SlotData(0,0));
+            inventory1.Add(new SlotData(0, 0));
+            inventory1.Add(new SlotData(0, 0));
+            inventory1.Add(new SlotData(0, 0));
 
             using (IEnumerator<SlotData> e1 = inventory1.GetEnumerator())
             using (IEnumerator<SlotData> e2 = inventory2.GetEnumerator())
@@ -240,6 +240,45 @@ namespace Collections
 
             #region Hashtable
             MyHashtable<string, float> myHashtable = new MyHashtable<string, float>();
+            myHashtable.Add("Luke", 90.0f);
+            myHashtable.Add("Carm", 80.0f);
+
+            foreach (var item in myHashtable)
+            {
+                Console.WriteLine($"{item.Key} 의 점수 : {item.Value}");
+            }
+
+            foreach (var item in myHashtable.Keys)
+            {
+                Console.WriteLine($"이름 : {item}");
+            }
+
+            foreach (var item in myHashtable.Values)
+            {
+                Console.WriteLine($"점수들 : {item}");
+            }
+
+            // C# 제공 Hashtable
+            Hashtable hashtable = new Hashtable();
+            hashtable.Add("철수", 90.0f);
+
+            Dictionary<string, float> dictionary = new Dictionary<string, float>();
+            dictionary.Add("Luke", 30.0f);
+
+            foreach (var item in dictionary)
+            {
+                Console.WriteLine($"{item.Key}의 점수 : {item.Value}");
+            }
+
+            foreach (var item in dictionary.Keys)
+            {
+                Console.WriteLine($"이름 : {item}");
+            }
+
+           
+            HashSet<int> set = new HashSet<int>();
+            set.Add(1);
+            set.Add(2);
             #endregion
 
         }
