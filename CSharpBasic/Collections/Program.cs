@@ -281,6 +281,99 @@ namespace Collections
             set.Add(2);
             #endregion
 
+
+            IEnumerator routine = GetMakingToastRoutine();
+            Console.WriteLine("Toast routine1");
+            while (routine.MoveNext())
+            {
+                Console.WriteLine(routine.Current);
+            }
+
+            routine = GetMakingToastRoutine2();
+
+            Console.WriteLine("Toast routine2");
+            while (routine.MoveNext())
+            {
+                Console.WriteLine(routine.Current);
+            }
+
+            Console.WriteLine("Toast routine2");
+            // routine.Reset(); 단일성 객체라서 yield 로간소화된 객체는 Reset 못함
+            while (routine.MoveNext())
+            {
+                Console.WriteLine(routine.Current);
+            }
+
+            foreach (var item in NumberEnumerationRoutine())
+            {
+                Console.WriteLine(item);
+            }
         }
+
+
+        static IEnumerator GetMakingToastRoutine()
+        {
+            return new MakingToastRoutine();
+        }
+
+        static IEnumerator GetMakingToastRoutine2()
+        {
+            // yield 키워드 
+            // Enumerator 객체 정의의 간소화 구문.
+            // yield return MoveNext할때마다 바뀔 값
+            yield return "Indunction On";
+            yield return "Pan ready";
+            yield return "Put butter in Pan";
+            yield return "Put bread in Pan";
+            yield return "Wait until bread toasted";
+            yield return "Put jam on bread";
+            yield return "Induction Off";
+            yield return "Toast is ready";
+            yield return null;
+        }
+
+        static IEnumerable NumberEnumerationRoutine()
+        {
+            yield return 1;
+            yield return 2;
+            yield return 3;
+        }
+
+
+        struct MakingToastRoutine : IEnumerator
+        {
+            public object Current => _routine[_step];
+            private string[] _routine =
+            {
+                "Induction On",
+                "Pan ready",
+                "Put butter in Pan",
+                "Put bread in Pan",
+                "Wait until bread toasted",
+                "Put jam on bread",
+                "Induction Off",
+                "Toast is ready"
+            };
+            private int _step = -1;
+
+            public MakingToastRoutine()
+            {
+            }
+
+            public bool MoveNext()
+            {
+                if (_step >= _routine.Length)
+                    return false;
+
+                _step++;
+                return _step < _routine.Length;
+            }
+
+            public void Reset()
+            {
+                _step = -1;
+            }
+        }
+
     }
 }

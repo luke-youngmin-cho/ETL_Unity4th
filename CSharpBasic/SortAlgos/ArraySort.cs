@@ -95,8 +95,8 @@
         {
             int part1 = start;
             int part2 = mid + 1;
-            int length1 = mid - start + 1;
-            int length2 = end - mid;
+            int length1 = mid - start + 1; // Part1 의 길이
+            int length2 = end - mid; // Part2 의 길이
 
             int[] copy1 = new int[length1];
             int[] copy2 = new int[length2];
@@ -136,7 +136,7 @@
         {
             if (start < end)
             {
-                int mid = end + (start - end) / 2 - 1; // == (start + end ) /2 - 1, Overflow 방지용
+                int mid = end + (start - end + 1) / 2 - 1; // == (start + end + 1 ) /2 - 1, Overflow 방지용
                 RecursiveMergeSort(arr, start, mid);
                 RecursiveMergeSort(arr, mid + 1, end);
 
