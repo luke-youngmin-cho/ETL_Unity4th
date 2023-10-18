@@ -14,6 +14,10 @@
         Wall    = 1 << 3, // ... 00001000
         GroundOrWall = Ground | Wall, // ... 00001100 -> Ground, Wall 만 검출됨
     }
+    // ... 00000100
+    // ... 00001100 &
+    // ... 00000100 > 0
+
 
     public enum LayerMaskWrong
     {
