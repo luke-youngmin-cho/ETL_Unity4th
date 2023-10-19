@@ -7,13 +7,17 @@ namespace Platformer.FSM
     public class StateMachine<T>
         where T : Enum
     {
-        public CharacterController owner;
         public T currentStateID;
         protected Dictionary<T, IState<T>> states;
 
         public void Init(IDictionary<T, IState<T>> copy)
         {
             states = new Dictionary<T, IState<T>>(copy);
+        }
+
+        public void UpdateState()
+        {
+            ChangeState(states[currentStateID].OnStateUpdate());
         }
 
         public bool ChangeState(T newStateID)

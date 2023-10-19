@@ -42,12 +42,28 @@ namespace Platformer.Controllers
         [SerializeField] private float _moveSpeed;
         protected Rigidbody2D rigidbody;
 
+        public bool isGrounded
+        {
+            get
+            {
+                ground = Physics2D.OverlapBox(rigidbody.position + _groundDetectOffset,
+                                              _groundDetectSize,
+                                              0.0f,
+                                              _groundMask);
+                return ground;
+            }
+        }
+        public Collider2D ground;
+        [SerializeField] private Vector2 _groundDetectOffset;
+        [SerializeField] private Vector2 _groundDetectSize;
+        [SerializeField] private LayerMask _groundMask;
+
         protected virtual void Awake()
         {
             rigidbody = GetComponent<Rigidbody2D>();
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             if (isMovable)
             {
@@ -68,6 +84,12 @@ namespace Platformer.Controllers
         private void Move()
         {
             rigidbody.position += move * Time.fixedDeltaTime;
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(transform.position + (Vector3)_groundDetectOffset, _groundDetectSize);
         }
     }
 }
