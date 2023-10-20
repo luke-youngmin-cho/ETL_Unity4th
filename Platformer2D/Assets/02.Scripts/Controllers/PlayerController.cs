@@ -10,24 +10,37 @@ namespace Platformer.Controllers
 
         public override float vertical => Input.GetAxis("Vertical");
 
-        private PlayerMachine _machine;
 
         private void Start()
         {
-            _machine = new PlayerMachine(this);
-            var machineData = StateMachineDataSheet.GetPlayerData(_machine);
-            _machine.Init(machineData);
-            _machine.currentStateID = machineData.First().Key; 
+            machine = new PlayerMachine(this);
+            var machineData = StateMachineDataSheet.GetPlayerData(machine);
+            machine.Init(machineData);
         }
 
         protected override void Update()
         {
             base.Update();
-
+            
             if (Input.GetKey(KeyCode.LeftAlt))
-                _machine.ChangeState(CharacterStateID.Jump);
+            {
+                if (machine.ChangeState(CharacterStateID.DownJump) == false &&
+                    machine.ChangeState(CharacterStateID.Jump) == false &&
+                    Input.GetKeyDown(KeyCode.LeftAlt))
+                {
+                    machine.ChangeState(CharacterStateID.DoubleJump);
+                }
+            }
 
-            _machine.UpdateState();
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                machine.ChangeState(CharacterStateID.Crouch);
+            }
+            else if (Input.GetKeyUp(KeyCode.DownArrow))
+            {
+                if (machine.currentStateID == CharacterStateID.Crouch)
+                    machine.ChangeState(CharacterStateID.Idle);
+            }
         }
     }
 }

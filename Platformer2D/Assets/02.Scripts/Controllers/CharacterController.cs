@@ -1,3 +1,5 @@
+using Platformer.FSM;
+using System.Linq;
 using UnityEngine;
 
 namespace Platformer.Controllers
@@ -53,10 +55,46 @@ namespace Platformer.Controllers
                 return ground;
             }
         }
+
+        public bool isGroundBelowExist
+        {
+            get
+            {
+                Vector3 castStartPos = transform.position + (Vector3)_groundDetectOffset + Vector3.down * _groundDetectSize.y + Vector3.down * 0.01f;
+                RaycastHit2D[] hits =
+                    Physics2D.BoxCastAll(origin: castStartPos,
+                                         size: _groundDetectSize,
+                                         angle: 0.0f,
+                                         direction: Vector2.down,
+                                         distance: _groundBelowDetectDistance,
+                                         layerMask: _groundMask);
+
+                RaycastHit2D hit = default;
+                if (hits.Length > 0)
+                    hit = hits.FirstOrDefault(x => ground ?? x != ground);
+
+                groundBelow = hit.collider;
+                return groundBelow;
+            }
+        }
+
         public Collider2D ground;
+        public Collider2D groundBelow;
         [SerializeField] private Vector2 _groundDetectOffset;
         [SerializeField] private Vector2 _groundDetectSize;
+        [SerializeField] private float _groundBelowDetectDistance;
+
         [SerializeField] private LayerMask _groundMask;
+
+        public bool hasJumped;
+        public bool hasDoubleJumped;
+        protected CharacterMachine machine;
+
+        public void Stop()
+        {
+            move = Vector2.zero; // 입력 0
+            rigidbody.velocity = Vector2.zero; // 속도 0
+        }
 
         protected virtual void Awake()
         {
@@ -65,6 +103,8 @@ namespace Platformer.Controllers
 
         protected virtual void Update()
         {
+            machine.UpdateState();
+
             if (isMovable)
             {
                 move = new Vector2(horizontal * _moveSpeed, 0.0f);
@@ -76,8 +116,15 @@ namespace Platformer.Controllers
             }
         }
 
+        protected virtual void LateUpdate()
+        {
+            machine.LateUpdateState();
+        }
+
         protected virtual void FixedUpdate()
         {
+            machine.FixedUpdateState();
+
             Move();
         }
 
@@ -90,6 +137,39 @@ namespace Platformer.Controllers
         {
             Gizmos.color = Color.green;
             Gizmos.DrawWireCube(transform.position + (Vector3)_groundDetectOffset, _groundDetectSize);
+
+            Vector3 castStartPos = transform.position + (Vector3)_groundDetectOffset + Vector3.down * _groundDetectSize.y + Vector3.down * 0.01f;
+            RaycastHit2D[] hits =
+                Physics2D.BoxCastAll(origin: castStartPos,
+                                     size: _groundDetectSize,
+                                     angle: 0.0f,
+                                     direction: Vector2.down,
+                                     distance: _groundBelowDetectDistance,
+                                     layerMask: _groundMask);
+
+            RaycastHit2D hit = default;
+            if (hits.Length > 0)
+                hit = hits.FirstOrDefault(x => ground ?? x != ground);
+
+
+            Gizmos.color = Color.gray;
+            Gizmos.DrawWireCube(castStartPos, _groundDetectSize);
+            Gizmos.DrawWireCube(castStartPos + Vector3.down * _groundBelowDetectDistance, _groundDetectSize);
+            Gizmos.DrawLine(castStartPos + Vector3.left * _groundDetectSize.x / 2.0f,
+                            castStartPos + Vector3.left * _groundDetectSize.x / 2.0f + Vector3.down * _groundBelowDetectDistance);
+            Gizmos.DrawLine(castStartPos + Vector3.right * _groundDetectSize.x / 2.0f,
+                            castStartPos + Vector3.right * _groundDetectSize.x / 2.0f + Vector3.down * _groundBelowDetectDistance);
+
+            if (hit.collider != null)
+            {
+                Gizmos.color = Color.magenta;
+                Gizmos.DrawWireCube(castStartPos, _groundDetectSize);
+                Gizmos.DrawWireCube(castStartPos + Vector3.down * hit.distance, _groundDetectSize);
+                Gizmos.DrawLine(castStartPos + Vector3.left * _groundDetectSize.x / 2.0f,
+                                castStartPos + Vector3.left * _groundDetectSize.x / 2.0f + Vector3.down * hit.distance);
+                Gizmos.DrawLine(castStartPos + Vector3.right * _groundDetectSize.x / 2.0f,
+                                castStartPos + Vector3.right * _groundDetectSize.x / 2.0f + Vector3.down * hit.distance);
+            }
         }
     }
 }

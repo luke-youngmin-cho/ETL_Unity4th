@@ -876,7 +876,7 @@ Transform:
   m_GameObject: {fileID: 377565543}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.2360017, y: 0.784, z: -10}
+  m_LocalPosition: {x: 2.4800017, y: -1.43, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1214,7 +1214,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.2360017, y: 0.784, z: -10}
+  m_LocalPosition: {x: 2.4800017, y: -1.43, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2140,7 +2140,7 @@ Transform:
   m_GameObject: {fileID: 1904100629}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.236, y: 0.534, z: 0}
+  m_LocalPosition: {x: 2.48, y: -1.68, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2227,11 +2227,15 @@ MonoBehaviour:
   move: {x: 0, y: 0}
   _moveSpeed: 1
   ground: {fileID: 0}
+  groundBelow: {fileID: 0}
   _groundDetectOffset: {x: 0, y: 0}
   _groundDetectSize: {x: 0.08, y: 0.02}
+  _groundBelowDetectDistance: 1.5
   _groundMask:
     serializedVersion: 2
     m_Bits: 64
+  hasJumped: 0
+  hasDoubleJumped: 0
 --- !u!1001 &1968247865
 PrefabInstance:
   m_ObjectHideFlags: 0
