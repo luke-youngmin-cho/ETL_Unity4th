@@ -9,6 +9,7 @@ namespace Platformer.FSM
         where T : Enum
     {
         public T currentStateID;
+        public T previousStateID;
         protected Dictionary<T, IState<T>> states;
         private bool _isDirty;
 
@@ -21,7 +22,10 @@ namespace Platformer.FSM
 
         public void UpdateState()
         {
-            ChangeState(states[currentStateID].OnStateUpdate());
+            // 현재 상태를 업데이트하고 그 상태가 넘겨준 다음 상태로
+            T nextID = states[currentStateID].OnStateUpdate();
+            // 바꾼다
+            ChangeState(nextID);
         }
 
         public void FixedUpdateState()
@@ -49,6 +53,7 @@ namespace Platformer.FSM
 
             _isDirty = true;
             states[currentStateID].OnStateExit(); // 기존 상태에서 탈출
+            previousStateID = currentStateID;
             currentStateID = newStateID; // 상태 갱신
             states[currentStateID].OnStateEnter(); // 새로운 상태로 진입
             return true;

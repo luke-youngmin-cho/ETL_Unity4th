@@ -1,6 +1,8 @@
 using Platformer.FSM;
 using System.Linq;
+using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.XR;
 
 namespace Platformer.Controllers
 {
@@ -24,13 +26,32 @@ namespace Platformer.Controllers
             
             if (Input.GetKey(KeyCode.LeftAlt))
             {
-                if (machine.ChangeState(CharacterStateID.DownJump) == false &&
-                    machine.ChangeState(CharacterStateID.Jump) == false &&
-                    Input.GetKeyDown(KeyCode.LeftAlt))
+                if (machine.ChangeState(CharacterStateID.DownJump) ||
+                    (machine.currentStateID == CharacterStateID.WallSlide == false && machine.ChangeState(CharacterStateID.Jump)))
                 {
-                    machine.ChangeState(CharacterStateID.DoubleJump);
+                }
+                
+            }
+
+            if (Input.GetKeyDown(KeyCode.LeftAlt))
+            {
+                if (machine.ChangeState(CharacterStateID.DoubleJump) == false &&
+                    ((machine.currentStateID == CharacterStateID.WallSlide) && machine.ChangeState(CharacterStateID.Jump)))
+                {
                 }
             }
+
+
+            if (Input.GetKey(KeyCode.RightArrow) ||
+                Input.GetKey(KeyCode.LeftArrow))
+            {
+                machine.ChangeState(CharacterStateID.WallSlide);
+            }
+            else if (machine.currentStateID == CharacterStateID.WallSlide)
+            {
+                machine.ChangeState(CharacterStateID.Idle);
+            }
+
 
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {

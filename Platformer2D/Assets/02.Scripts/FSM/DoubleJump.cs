@@ -25,9 +25,10 @@ namespace Platformer.FSM.Character
             controller.isMovable = false;
             controller.hasJumped = true;
             controller.hasDoubleJumped = true;
-            animator.Play("Jump");
-            rigidbody.velocity = new Vector2(rigidbody.velocity.x, 0.0f);
+            controller.Stop();
+            rigidbody.velocity = new Vector2(controller.horizontal * controller.moveSpeed, 0.0f);
             rigidbody.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
+            animator.Play("Jump");
         }
 
         public override CharacterStateID OnStateUpdate()
