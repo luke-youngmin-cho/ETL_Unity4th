@@ -1,4 +1,5 @@
 using Platformer.FSM;
+using Platformer.GameElements;
 using Platformer.Stats;
 using System;
 using System.Linq;
@@ -47,7 +48,7 @@ namespace Platformer.Controllers
         [SerializeField] private float _moveSpeed;
         protected Rigidbody2D rigidbody;
 
-        // Ground Detection
+        #region Ground Detection
         public bool isGrounded
         {
             get
@@ -88,8 +89,9 @@ namespace Platformer.Controllers
         [SerializeField] private Vector2 _groundDetectSize;
         [SerializeField] private float _groundBelowDetectDistance;
         [SerializeField] private LayerMask _groundMask;
+        #endregion
 
-        // Wall Detection
+        #region Wall Detection
         public bool isWallDetected
         {
             get
@@ -103,6 +105,56 @@ namespace Platformer.Controllers
         private Vector2 wallBottomCastCenter => rigidbody.position;
         [SerializeField] private LayerMask _wallMask;
         [SerializeField] private float _wallDetectDistance;
+        #endregion
+
+        #region Ladder Detection
+
+        public bool isUpLadderDetected
+        {
+            get
+            {
+                Collider2D col = Physics2D.OverlapCircle(transform.position + Vector3.up * _ladderUpDetectOffset,
+                                                         _ladderDetectRadius,
+                                                         _ladderMask);
+
+                if (col)
+                {
+                    upLadder = col.GetComponent<Ladder>();
+                    return true;
+                }
+
+                upLadder = null;
+                return false;
+            }
+        }
+
+        public bool isDownLadderDetected
+        {
+            get
+            {
+                Collider2D col = Physics2D.OverlapCircle(transform.position + Vector3.down * _ladderDownDetectOffset,
+                                                         _ladderDetectRadius,
+                                                         _ladderMask);
+
+                if (col)
+                {
+                    downLadder = col.GetComponent<Ladder>();
+                    return true;
+                }
+
+                downLadder = null;
+                return false;
+            }
+        }
+
+        public Ladder upLadder;
+        public Ladder downLadder;
+        [SerializeField] private float _ladderUpDetectOffset; // 사다리타고 올라가기위한 위치감지 오프셋
+        [SerializeField] private float _ladderDownDetectOffset; // 사다리타고 내려가기위한 위치감지 오프셋
+        [SerializeField] private float _ladderDetectRadius; // 감지 반경
+        [SerializeField] private LayerMask _ladderMask;
+
+        #endregion
 
         public float hpValue
         {
@@ -128,7 +180,10 @@ namespace Platformer.Controllers
 
         public float hpMin => 0f;
 
+        public bool invincible { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         private float _hp;
+
         [SerializeField] private float _hpMax;
         public event Action<float> onHpChanged;
         public event Action<float> onHpRecovered;
@@ -199,6 +254,7 @@ namespace Platformer.Controllers
             DrawGroundDetectGizmos();
             DrawGroundBelowDetectGizmos();
             DrawWallDetectGizmos();
+            DrawLadderDetectGizmos();
         }
 
         private void DrawGroundDetectGizmos()
@@ -251,6 +307,14 @@ namespace Platformer.Controllers
             Gizmos.color = Color.red;
             Gizmos.DrawLine(wallTopCastCenter, wallTopCastCenter + Vector2.right * _wallDetectDistance * _direction);
             Gizmos.DrawLine(wallBottomCastCenter, wallBottomCastCenter + Vector2.right * _wallDetectDistance * _direction);
+        }
+
+        private void DrawLadderDetectGizmos()
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawSphere(transform.position + Vector3.up * _ladderUpDetectOffset, _ladderDetectRadius);
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawSphere(transform.position + Vector3.down * _ladderDownDetectOffset, _ladderDetectRadius);
         }
 
         public void RecoverHp(object subject, float amount)

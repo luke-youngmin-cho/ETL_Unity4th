@@ -13,11 +13,14 @@ namespace Platformer.Controllers
         public override float vertical => Input.GetAxis("Vertical");
 
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             machine = new PlayerMachine(this);
             var machineData = StateMachineDataSheet.GetPlayerData(machine);
             machine.Init(machineData);
+            onHpDepleted += (amount) => machine.ChangeState(CharacterStateID.Hurt);
+            onHpMin += () => machine.ChangeState(CharacterStateID.Die);
         }
 
         protected override void Update()
@@ -61,6 +64,11 @@ namespace Platformer.Controllers
             {
                 if (machine.currentStateID == CharacterStateID.Crouch)
                     machine.ChangeState(CharacterStateID.Idle);
+            }
+
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                machine.ChangeState(CharacterStateID.Dash);
             }
         }
     }

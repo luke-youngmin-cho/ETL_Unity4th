@@ -12,9 +12,9 @@ namespace Platformer.Stats
         public float hpMax { get; }
         public float hpMin { get; }
 
-        public event Action<float> onHpChanged;
-        public event Action<float> onHpRecovered;
-        public event Action<float> onHpDepleted;
+        public event Action<float> onHpChanged; // float : 바뀐 이후 체력
+        public event Action<float> onHpRecovered; // float : 회복된 양
+        public event Action<float> onHpDepleted; // float : 깎인 양
         public event Action onHpMax;
         public event Action onHpMin;
 

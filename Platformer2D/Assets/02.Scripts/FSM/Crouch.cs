@@ -12,9 +12,18 @@ namespace Platformer.FSM.Character
 
         private int _step;
 
-        public Crouch(CharacterMachine machine)
+        private Vector2 _originalColliderOffset; // 원래 충돌체 오프셋
+        private Vector2 _originalColliderSize; // 원래 충돌체 크기
+        private Vector2 _crouchedColliderOffset; // 숙인상태의 충돌체 오프셋
+        private Vector2 _crouchedColliderSize; // 숙인상태의 충돌체 크기
+
+        public Crouch(CharacterMachine machine, Vector2 crouchedColliderOffset, Vector2 crouchedColliderSize)
             : base(machine)
         {
+            _originalColliderOffset = trigger.offset;
+            _originalColliderSize = trigger.size;
+            _crouchedColliderOffset = crouchedColliderOffset;
+            _crouchedColliderSize = crouchedColliderSize;
         }
 
         public override void OnStateEnter()
@@ -23,8 +32,17 @@ namespace Platformer.FSM.Character
             controller.isDirectionChangeable = false;
             controller.isMovable = false;
             controller.Stop();
+            collision.offset = trigger.offset = _crouchedColliderOffset;
+            collision.size = trigger.size = _crouchedColliderSize;
             animator.Play("CrouchStart");
             _step = 0;
+        }
+
+        public override void OnStateExit()
+        {
+            base.OnStateExit();
+            collision.offset = trigger.offset = _originalColliderOffset;
+            collision.size = trigger.size = _originalColliderSize;
         }
 
         public override CharacterStateID OnStateUpdate()
