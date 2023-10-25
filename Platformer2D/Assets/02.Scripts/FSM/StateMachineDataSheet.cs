@@ -18,10 +18,13 @@ namespace Platformer.FSM
                 { CharacterStateID.DownJump, new DownJump(machine) },
                 { CharacterStateID.Land, new Land(machine) },
                 { CharacterStateID.Crouch, new Crouch(machine, new Vector2(0.0f, 0.06f), new Vector2(0.12f, 0.12f)) },
+                { CharacterStateID.Slide, new Slide(machine, 1.2f, new Vector2(0.0f, 0.06f), new Vector2(0.12f, 0.12f)) },
                 { CharacterStateID.WallSlide, new WallSlide(machine) },
                 { CharacterStateID.Dash, new Dash(machine, 1.5f) },
                 { CharacterStateID.Hurt, new Hurt(machine) },
                 { CharacterStateID.Die, new Die(machine) },
+                { CharacterStateID.UpLadderClimb, new UpLadderClimb(machine) },
+                { CharacterStateID.DownLadderClimb, new DownLadderClimb(machine) },
             };
         }
     }

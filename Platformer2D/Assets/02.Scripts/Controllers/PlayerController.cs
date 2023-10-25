@@ -55,6 +55,15 @@ namespace Platformer.Controllers
                 machine.ChangeState(CharacterStateID.Idle);
             }
 
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                machine.ChangeState(CharacterStateID.UpLadderClimb);
+            }
+
+            if (Input.GetKey(KeyCode.DownArrow))
+            {
+                machine.ChangeState(CharacterStateID.DownLadderClimb);
+            }
 
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
@@ -69,6 +78,11 @@ namespace Platformer.Controllers
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 machine.ChangeState(CharacterStateID.Dash);
+            }
+
+            if (Input.GetKeyDown(KeyCode.X))
+            {
+                machine.ChangeState(CharacterStateID.Slide);
             }
         }
     }

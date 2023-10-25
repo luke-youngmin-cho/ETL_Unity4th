@@ -865,6 +865,7 @@ GameObject:
   - component: {fileID: 208889824}
   - component: {fileID: 208889825}
   - component: {fileID: 208889826}
+  - component: {fileID: 208889827}
   m_Layer: 0
   m_Name: Renderer
   m_TagString: Untagged
@@ -960,6 +961,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &208889827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 208889823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee8375e5b9dc7c248b5fe1f3cd176a0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &248693943
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1464,7 +1477,7 @@ Transform:
   m_GameObject: {fileID: 377565543}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.520002, y: -0.22999999, z: -10}
+  m_LocalPosition: {x: 4.880002, y: -1.3499999, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2138,7 +2151,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.520002, y: -0.22999999, z: -10}
+  m_LocalPosition: {x: 4.880002, y: -1.3499999, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5561,7 +5574,7 @@ Transform:
   m_GameObject: {fileID: 1904100629}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.52, y: -0.48, z: 0}
+  m_LocalPosition: {x: 4.88, y: -1.5999999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5643,6 +5656,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4bfc93d220fcb54e98e62f8db44abbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageMin: 0
+  damageMax: 0
   isDirectionChangeable: 1
   isMovable: 1
   move: {x: 0, y: 0}

@@ -8,6 +8,8 @@ namespace Platformer.FSM.Character
         public override bool canExecute => base.canExecute &&
                                            controller.hasJumped == false &&
                                            machine.currentStateID == CharacterStateID.WallSlide ||
+                                           machine.currentStateID == CharacterStateID.UpLadderClimb ||
+                                           machine.currentStateID == CharacterStateID.DownLadderClimb ||
                                            ((machine.currentStateID == CharacterStateID.Idle ||
                                              machine.currentStateID == CharacterStateID.Move) &&
                                             controller.isGrounded);
@@ -28,7 +30,9 @@ namespace Platformer.FSM.Character
             controller.hasJumped = true;
             controller.hasDoubleJumped = false;
             animator.Play("Jump");
-            float velocityX = (machine.previousStateID == CharacterStateID.WallSlide) ?
+            float velocityX = (machine.previousStateID == CharacterStateID.WallSlide || 
+                               machine.previousStateID == CharacterStateID.UpLadderClimb ||
+                               machine.previousStateID == CharacterStateID.DownLadderClimb) ?
                 (controller.horizontal * controller.moveSpeed) : (rigidbody.velocity.x);
 
             rigidbody.velocity = new Vector2(velocityX, 0.0f);

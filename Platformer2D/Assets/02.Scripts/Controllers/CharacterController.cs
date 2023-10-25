@@ -9,6 +9,9 @@ namespace Platformer.Controllers
 {
     public abstract class CharacterController : MonoBehaviour, IHp
     {
+        public float damageMin; // ìµœì†Œê³µ
+        public float damageMax; // ìµœëŒ€ê³µ
+
         public const int DIRECTION_RIGHT = 1;
         public const int DIRECTION_LEFT = -1;
         public int direction
@@ -119,8 +122,14 @@ namespace Platformer.Controllers
 
                 if (col)
                 {
-                    upLadder = col.GetComponent<Ladder>();
-                    return true;
+                    if (col.TryGetComponent(out upLadder))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        throw new Exception($"[CharacterController] : Seems like layer of {col.name} is wrong");
+                    }
                 }
 
                 upLadder = null;
@@ -149,9 +158,9 @@ namespace Platformer.Controllers
 
         public Ladder upLadder;
         public Ladder downLadder;
-        [SerializeField] private float _ladderUpDetectOffset; // »ç´Ù¸®Å¸°í ¿Ã¶ó°¡±âÀ§ÇÑ À§Ä¡°¨Áö ¿ÀÇÁ¼Â
-        [SerializeField] private float _ladderDownDetectOffset; // »ç´Ù¸®Å¸°í ³»·Á°¡±âÀ§ÇÑ À§Ä¡°¨Áö ¿ÀÇÁ¼Â
-        [SerializeField] private float _ladderDetectRadius; // °¨Áö ¹İ°æ
+        [SerializeField] private float _ladderUpDetectOffset; // ì‚¬ë‹¤ë¦¬íƒ€ê³  ì˜¬ë¼ê°€ê¸°ìœ„í•œ ìœ„ì¹˜ê°ì§€ ì˜¤í”„ì…‹
+        [SerializeField] private float _ladderDownDetectOffset; // ì‚¬ë‹¤ë¦¬íƒ€ê³  ë‚´ë ¤ê°€ê¸°ìœ„í•œ ìœ„ì¹˜ê°ì§€ ì˜¤í”„ì…‹
+        [SerializeField] private float _ladderDetectRadius; // ê°ì§€ ë°˜ê²½
         [SerializeField] private LayerMask _ladderMask;
 
         #endregion
@@ -202,8 +211,8 @@ namespace Platformer.Controllers
 
         public void Stop()
         {
-            move = Vector2.zero; // ÀÔ·Â 0
-            rigidbody.velocity = Vector2.zero; // ¼Óµµ 0
+            move = Vector2.zero; // ì…ë ¥ 0
+            rigidbody.velocity = Vector2.zero; // ì†ë„ 0
         }
 
         protected virtual void Awake()
