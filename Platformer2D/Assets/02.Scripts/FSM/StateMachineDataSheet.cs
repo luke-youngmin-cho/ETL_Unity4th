@@ -1,4 +1,5 @@
-﻿using Platformer.FSM.Character;
+using Platformer.FSM.Character;
+using Platformer.Datum;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,6 +26,26 @@ namespace Platformer.FSM
                 { CharacterStateID.Die, new Die(machine) },
                 { CharacterStateID.UpLadderClimb, new UpLadderClimb(machine) },
                 { CharacterStateID.DownLadderClimb, new DownLadderClimb(machine) },
+                { CharacterStateID.Attack, new Attack(machine, 0.5f,
+                    new SkillCastSetting[]
+                    {
+                        SkillCastSettingAssets.instance["PlayerAttack1"],
+                        SkillCastSettingAssets.instance["PlayerAttack2"],
+                    }) },
+            };
+        }
+
+        public static IDictionary<CharacterStateID, IState<CharacterStateID>> GetSlugData(CharacterMachine machine)
+        {
+            return new Dictionary<CharacterStateID, IState<CharacterStateID>>()
+            {
+                { CharacterStateID.Idle, new Idle(machine) },
+                { CharacterStateID.Move, new Move(machine) },
+                { CharacterStateID.Fall, new Fall(machine, 0.8f) },
+                { CharacterStateID.Jump, new Jump(machine, 1.5f) },
+                { CharacterStateID.Land, new Land(machine) },
+                { CharacterStateID.Hurt, new Hurt(machine) },
+                { CharacterStateID.Die, new Die(machine) },
             };
         }
     }

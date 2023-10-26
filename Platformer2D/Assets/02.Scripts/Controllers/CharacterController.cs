@@ -189,7 +189,7 @@ namespace Platformer.Controllers
 
         public float hpMin => 0f;
 
-        public bool invincible { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool invincible { get; set; }
 
         private float _hp;
 
@@ -208,6 +208,11 @@ namespace Platformer.Controllers
         public bool hasDoubleJumped;
         protected CharacterMachine machine;
 
+        public void Knockback(Vector2 force)
+        {
+            rigidbody.velocity = Vector2.zero;
+            rigidbody.AddForce(force, ForceMode2D.Impulse);
+        }
 
         public void Stop()
         {
@@ -258,7 +263,7 @@ namespace Platformer.Controllers
             rigidbody.position += move * Time.fixedDeltaTime;
         }
 
-        private void OnDrawGizmosSelected()
+        protected virtual void OnDrawGizmosSelected()
         {
             DrawGroundDetectGizmos();
             DrawGroundBelowDetectGizmos();
@@ -332,7 +337,7 @@ namespace Platformer.Controllers
             onHpRecovered?.Invoke(amount);
         }
 
-        public void DepleteHp(object subject, float amount)
+        public virtual void DepleteHp(object subject, float amount)
         {
             hpValue -= amount;
             onHpDepleted?.Invoke(amount);

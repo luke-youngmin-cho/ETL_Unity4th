@@ -1,8 +1,10 @@
 using Platformer.Animations;
 using Platformer.Stats;
+using Platformer.Datum;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 namespace Platformer.FSM.Character
 {
@@ -56,21 +58,12 @@ namespace Platformer.FSM.Character
         private float _exitTimeMark; // 마지막 공격 끝난 시간
         private bool _hasHit; // 현재 공격 히트판정 됐는지 ?
 
-        public class AttackSetting
-        {
-            public int targetMax; // 최대 타게팅 수
-            public LayerMask targetMask; // 타겟 검출 마스크 
-            public float damageGain; // 공격 계수
-            public Vector2 castCenter; // 타겟 감지 형상(사각형) 범위 중심
-            public Vector2 castSize; // 타겟 감지 형상 크기
-            public float castDistance; // 타겟 감지 형상 빔 거리 
-        }
 
-        private AttackSetting[] _attackSettings;
+        private SkillCastSetting[] _attackSettings;
         private List<IHp> _targets = new List<IHp>();
         private CharacterAnimationEvents _animationEvents;
 
-        public Attack(CharacterMachine machine, AttackSetting[] attackSettings, float comboResetTime) 
+        public Attack(CharacterMachine machine, float comboResetTime, SkillCastSetting[] attackSettings) 
             : base(machine)
         {
             _attackSettings = attackSettings;
@@ -86,7 +79,7 @@ namespace Platformer.FSM.Character
                         continue;
 
                     float damage = Random.Range(controller.damageMin, controller.damageMax) * _attackSettings[_comboStack - 1].damageGain;
-                    target.DepleteHp(controller, damage);
+                    target.DepleteHp(transform, damage);
                 }
                 _hasHit = true;
             };
@@ -96,10 +89,10 @@ namespace Platformer.FSM.Character
         {
             base.OnStateEnter();
             controller.isDirectionChangeable = false;
-            controller.isMovable = controller.isGrounded;
+            controller.isMovable = false; //controller.isGrounded;
             _hasHit = false;
 
-            AttackSetting setting = _attackSettings[_comboStack];
+            SkillCastSetting setting = _attackSettings[_comboStack];
             RaycastHit2D[] hits =
                 Physics2D.BoxCastAll(origin: rigidbody.position + new Vector2(setting.castCenter.x * controller.direction, setting.castCenter.y),
                                      size: setting.castSize,
@@ -107,22 +100,6 @@ namespace Platformer.FSM.Character
                                      direction: Vector2.right * controller.direction,
                                      distance: setting.castDistance,
                                      layerMask: setting.targetMask);
-
-            Vector2 origin = rigidbody.position + new Vector2(setting.castCenter.x * controller.direction, setting.castCenter.y);
-            Vector2 size = setting.castSize;
-            float distance = setting.castDistance;
-            // L-T -> R-T
-            Debug.DrawLine(origin + new Vector2(-size.x / 2.0f * controller.direction, +size.y / 2.0f),
-                           origin + new Vector2(+size.x / 2.0f * controller.direction, +size.y / 2.0f) + Vector2.right * controller.direction * distance);
-            // L-B -> R-B
-            Debug.DrawLine(origin + new Vector2(-size.x / 2.0f * controller.direction, -size.y / 2.0f),
-                           origin + new Vector2(+size.x / 2.0f * controller.direction, -size.y / 2.0f) + Vector2.right * controller.direction * distance);
-            // L-T -> L-B
-            Debug.DrawLine(origin + new Vector2(-size.x / 2.0f * controller.direction, +size.y / 2.0f),
-                           origin + new Vector2(-size.x / 2.0f * controller.direction, -size.y / 2.0f));
-            // R-T -> R-B
-            Debug.DrawLine(origin + new Vector2(+size.x / 2.0f * controller.direction, +size.y / 2.0f) + Vector2.right * controller.direction * distance,
-                           origin + new Vector2(+size.x / 2.0f * controller.direction, -size.y / 2.0f) + Vector2.right * controller.direction * distance);
 
             // 전체 감지된 아이들중에서 최대 타겟 수 까지만 대상으로 등록
             _targets.Clear();
@@ -137,6 +114,31 @@ namespace Platformer.FSM.Character
 
             animator.SetFloat("comboStack", _comboStack++); //애니메이션 파라미터 세팅 및 콤보스택 쌓기
             animator.Play("Attack");
+
+            Vector2 origin = rigidbody.position + new Vector2(setting.castCenter.x * controller.direction, setting.castCenter.y);
+            Vector2 size = setting.castSize;
+            float distance = setting.castDistance;
+            // L-T -> R-T
+            Debug.DrawLine(origin + new Vector2(-size.x / 2.0f * controller.direction, +size.y / 2.0f),
+                           origin + new Vector2(+size.x / 2.0f * controller.direction, +size.y / 2.0f) + Vector2.right * controller.direction * distance,
+                           Color.red,
+                           animator.GetCurrentAnimatorStateInfo(0).length);
+            // L-B -> R-B
+            Debug.DrawLine(origin + new Vector2(-size.x / 2.0f * controller.direction, -size.y / 2.0f),
+                           origin + new Vector2(+size.x / 2.0f * controller.direction, -size.y / 2.0f) + Vector2.right * controller.direction * distance,
+                           Color.red,
+                           animator.GetCurrentAnimatorStateInfo(0).length);
+            // L-T -> L-B
+            Debug.DrawLine(origin + new Vector2(-size.x / 2.0f * controller.direction, +size.y / 2.0f),
+                           origin + new Vector2(-size.x / 2.0f * controller.direction, -size.y / 2.0f),
+                           Color.red,
+                           animator.GetCurrentAnimatorStateInfo(0).length);
+            // R-T -> R-B
+            Debug.DrawLine(origin + new Vector2(+size.x / 2.0f * controller.direction, +size.y / 2.0f) + Vector2.right * controller.direction * distance,
+                           origin + new Vector2(+size.x / 2.0f * controller.direction, -size.y / 2.0f) + Vector2.right * controller.direction * distance,
+                           Color.red,
+                           animator.GetCurrentAnimatorStateInfo(0).length);
+
         }
 
         public override void OnStateExit()
@@ -154,6 +156,9 @@ namespace Platformer.FSM.Character
 
             if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
                 nextID = CharacterStateID.Idle;
+
+            if (controller.isGrounded)
+                controller.move = new Vector2(controller.horizontal * 0.1f, 0.0f);
 
             return nextID;
         }

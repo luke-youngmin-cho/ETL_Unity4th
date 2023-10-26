@@ -1,8 +1,5 @@
 using Platformer.FSM;
-using System.Linq;
-using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.XR;
 
 namespace Platformer.Controllers
 {
@@ -11,6 +8,17 @@ namespace Platformer.Controllers
         public override float horizontal => Input.GetAxis("Horizontal");
 
         public override float vertical => Input.GetAxis("Vertical");
+
+        private float _invincibleTimer;
+
+        public void SetInvincible(float duration)
+        {
+            if (duration < _invincibleTimer)
+                return;
+
+            _invincibleTimer = duration;
+            invincible = true;
+        }
 
 
         protected override void Start()
@@ -27,6 +35,16 @@ namespace Platformer.Controllers
         {
             base.Update();
             
+            // 무적 시간 확인
+            if (_invincibleTimer > 0)
+            {
+                _invincibleTimer -= Time.deltaTime;
+
+                if (_invincibleTimer <= 0)
+                    invincible = false;
+            }
+
+
             if (Input.GetKey(KeyCode.LeftAlt))
             {
                 if (machine.ChangeState(CharacterStateID.DownJump) ||
@@ -84,6 +102,22 @@ namespace Platformer.Controllers
             {
                 machine.ChangeState(CharacterStateID.Slide);
             }
+
+            if (Input.GetKey(KeyCode.LeftControl))
+            {
+                machine.ChangeState(CharacterStateID.Attack);
+            }
+        }
+
+        public override void DepleteHp(object subject, float amount)
+        {
+            base.DepleteHp(subject, amount);
+
+            SetInvincible(0.7f);
+
+            if (subject.GetType().Equals(typeof(Transform)))
+                Knockback(Vector2.right * (((Transform)subject).position.x - transform.position.x < 0 ? 1.0f : -1.0f) * 1.0f
+                          + Vector2.up * 1.0f);
         }
     }
 }
