@@ -7,67 +7,24 @@ using Random = UnityEngine.Random;
 
 namespace Platformer.FSM.Character
 {
-    public class Attack : CharacterStateBase
+    public class DashAttack : CharacterStateBase
     {
-        public override CharacterStateID id => CharacterStateID.Attack;
-        public override bool canExecute
-        {
-            get
-            {
-                if (base.canExecute == false)
-                    return false;
+        public override CharacterStateID id => CharacterStateID.DashAttack;
+        public override bool canExecute => base.canExecute &&
+                                           machine.currentStateID == CharacterStateID.Dash;
 
-                // 콤보스택이 쌓여있는 상황에서
-                // 공격이 끝났던 시간부터 경과된 시간이 콤보 초기화시간을 넘어갔으면 콤보 안됨
-                float elapsedTime = Time.time - _exitTimeMark; // 마지막 공격이후 경과된 시간
-                if (_comboStack > 0 &&
-                    elapsedTime >= _comboResetTime)
-                {
-                    _comboStack = 0;
-                    return false;
-                }
-
-                // 현재 스택이 최대치를 넘으면 콤보 안됨
-                if (_comboStack > _comboStackMax)
-                {
-                    return false;
-                }
-
-                // 첫타는 무조건 ㅇㅋ 
-                // 후속타는 이전 공격 히트판정 이후 ㅇㅋ
-                if ((_comboStack == 0 || (_comboStack > 0 && _hasHit)) &&
-                    (machine.currentStateID == CharacterStateID.Idle ||
-                     machine.currentStateID == CharacterStateID.Move ||
-                     machine.currentStateID == CharacterStateID.Crouch ||
-                     machine.currentStateID == CharacterStateID.Jump ||
-                     machine.currentStateID == CharacterStateID.DownJump ||
-                     machine.currentStateID == CharacterStateID.DoubleJump ||
-                     machine.currentStateID == CharacterStateID.Fall))
-                {
-                    return true;
-                }
-
-                return false;
-            }
-        }
-
-        private int _comboStackMax; // 최대 콤보 스택
-        private int _comboStack; // 현재 콤보 스택
-        private float _comboResetTime; // 공격 이후 콤보 초기화 시간
-        private float _exitTimeMark; // 마지막 공격 끝난 시간
-        private bool _hasHit; // 현재 공격 히트판정 됐는지 ?
-
-
-        private SkillCastSetting[] _attackSettings;
+        private SkillCastSetting _attackSetting;
         private List<IHp> _targets = new List<IHp>();
         private CharacterAnimationEvents _animationEvents;
+        private float _distance;
+        private Vector3 _startPosition;
+        private Vector3 _targetPosition;
 
-        public Attack(CharacterMachine machine, float comboResetTime, SkillCastSetting[] attackSettings) 
+        public DashAttack(CharacterMachine machine, float distance, SkillCastSetting attackSettings) 
             : base(machine)
         {
-            _attackSettings = attackSettings;
-            _comboStackMax = attackSettings.Length - 1;
-            _comboResetTime = comboResetTime;
+            _distance = distance;
+            _attackSetting = attackSettings;
 
             _animationEvents = animator.GetComponent<CharacterAnimationEvents>();
             
@@ -78,9 +35,12 @@ namespace Platformer.FSM.Character
             base.OnStateEnter();
             controller.isDirectionChangeable = false;
             controller.isMovable = false; //controller.isGrounded;
-            _hasHit = false;
+            controller.Stop();
+            rigidbody.bodyType = RigidbodyType2D.Kinematic;
+            _startPosition = transform.position;
+            _targetPosition = transform.position + Vector3.right * controller.direction * _distance;
 
-            SkillCastSetting setting = _attackSettings[_comboStack];
+            SkillCastSetting setting = _attackSetting;
             RaycastHit2D[] hits =
                 Physics2D.BoxCastAll(origin: rigidbody.position + new Vector2(setting.castCenter.x * controller.direction, setting.castCenter.y),
                                      size: setting.castSize,
@@ -107,15 +67,11 @@ namespace Platformer.FSM.Character
                     if (target == null)
                         continue;
 
-                    float damage = Random.Range(controller.damageMin, controller.damageMax) * _attackSettings[_comboStack - 1].damageGain;
+                    float damage = Random.Range(controller.damageMin, controller.damageMax) * _attackSetting.damageGain;
                     target.DepleteHp(transform, damage);
                 }
-                _hasHit = true;
-                Debug.Log("Hit");
             };
-
-            animator.SetFloat("comboStack", _comboStack++); //애니메이션 파라미터 세팅 및 콤보스택 쌓기
-            animator.Play("Attack");
+            animator.Play("DashAttack");
 
             Vector2 origin = rigidbody.position + new Vector2(setting.castCenter.x * controller.direction, setting.castCenter.y);
             Vector2 size = setting.castSize;
@@ -146,7 +102,7 @@ namespace Platformer.FSM.Character
         public override void OnStateExit()
         {
             base.OnStateExit();
-            _exitTimeMark = Time.time;
+            rigidbody.bodyType = RigidbodyType2D.Dynamic;
         }
 
         public override CharacterStateID OnStateUpdate()
@@ -159,8 +115,31 @@ namespace Platformer.FSM.Character
             if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
                 nextID = CharacterStateID.Idle;
 
-            if (controller.isGrounded)
-                controller.move = new Vector2(controller.horizontal * 0.1f, 0.0f);
+            float t = animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+            t = t < 0.05f ? t / 10.0f : Mathf.Log10(10 + t * 90) - 1;
+            Debug.Log(t);
+            Vector3 expected
+                = Vector3.Lerp(_startPosition, _targetPosition, t);
+
+            bool isValid = true;
+            // todo -> expected 위치가 유효한지 확인 (맵의 경계를 벗어난다든지, 벽이 있다든지 등.. )
+            if (Physics2D.OverlapCapsule((Vector2)expected + trigger.offset,
+                                         trigger.size,
+                                         trigger.direction,
+                                         0.0f,
+                                         1 << LayerMask.NameToLayer("Wall")))
+            {
+                _startPosition = transform.position;
+                _targetPosition = transform.position;
+                isValid = false;
+            }
+
+            if (isValid)
+                transform.position = expected;
+
+            if (t >= 1.0f)
+                nextID = CharacterStateID.Idle;
+
 
             return nextID;
         }

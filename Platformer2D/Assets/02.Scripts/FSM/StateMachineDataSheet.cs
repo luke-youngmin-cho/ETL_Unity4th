@@ -32,6 +32,9 @@ namespace Platformer.FSM
                         SkillCastSettingAssets.instance["PlayerAttack1"],
                         SkillCastSettingAssets.instance["PlayerAttack2"],
                     }) },
+                { CharacterStateID.DashAttack, new DashAttack(machine, 1.0f,
+                    SkillCastSettingAssets.instance["PlayerDashAttack"]
+                ) }
             };
         }
 

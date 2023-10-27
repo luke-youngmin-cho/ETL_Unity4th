@@ -105,6 +105,7 @@ namespace Platformer.Controllers
 
             if (Input.GetKey(KeyCode.LeftControl))
             {
+                machine.ChangeState(CharacterStateID.DashAttack);
                 machine.ChangeState(CharacterStateID.Attack);
             }
         }

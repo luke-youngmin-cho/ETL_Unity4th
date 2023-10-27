@@ -35,6 +35,7 @@ namespace Platformer.Controllers
         [SerializeField] private float _behaviourTimeMin;
         [SerializeField] private float _behaviourTimeMax;
         private float _behaviourTimer;
+        [SerializeField] private float _slopeAngle = 45.0f;
 
         private CapsuleCollider2D _trigger;
 
@@ -42,6 +43,7 @@ namespace Platformer.Controllers
         {
             base.Awake();
             _trigger = GetComponent<CapsuleCollider2D>();
+            _ai = AI.Think;
         }
 
         protected override void Update()
@@ -77,16 +79,50 @@ namespace Platformer.Controllers
             switch (_ai)
             {
                 case AI.Think:
+                    {
+                        _ai = AI.ExectueRandomBehaviour;
+                    }
                     break;
                 case AI.ExectueRandomBehaviour:
+                    {
+                        var nextID = _behaviours[Random.Range(0, _behaviours.Count)];
+                        if (machine.ChangeState(nextID))
+                        {
+                            _behaviourTimer = Random.Range(_behaviourTimeMin, _behaviourTimeMax);
+                            _horizontal = Random.Range(-1.0f, 1.0f);
+                            _ai = AI.WaitUntilBehaviour;
+                        }
+                        else
+                        {
+                            _ai = AI.Think;
+                        }
+                    }
                     break;
                 case AI.WaitUntilBehaviour:
+                    {
+                        if (_behaviourTimer <= 0)
+                        {
+                            _ai = AI.Think;
+                        }
+                        else
+                        {
+                            _behaviourTimer -= Time.deltaTime;
+                        }
+                    }
                     break;
                 case AI.Follow:
                     {
                         // 타겟 없으면 다시생각해
                         if (_target == null)
                         {
+                            _ai = AI.Think;
+                            return;
+                        }
+
+                        // 따라가던 타겟이 범위를 벗어나면 더이상 안따라감
+                        if (Vector2.Distance(transform.position, _target.position) > _targetDetectRange)
+                        {
+                            _target = null;
                             _ai = AI.Think;
                             return;
                         }
@@ -116,6 +152,28 @@ namespace Platformer.Controllers
                     break;
                 default:
                     break;
+            }
+        }
+
+        protected override void FixedUpdate()
+        {
+            if (machine.currentStateID != CharacterStateID.Move)
+            {
+                base.FixedUpdate();
+            }
+            else
+            {
+                machine.FixedUpdateState();
+                // 한 프레임당 이동 거리 = 속력 * 한 프레임당 걸린 시간
+                Vector2 expected = rigidbody.position + move * Time.fixedDeltaTime;
+                float distanceX = Mathf.Abs(expected.x - rigidbody.position.x);
+                float height = distanceX * Mathf.Tan(_slopeAngle * Mathf.Deg2Rad);
+                Vector2 origin = expected + Vector2.up * height;
+                RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, height * 2.0f, groundMask);
+                if (hit.collider)
+                {
+                    rigidbody.position = hit.point;
+                }
             }
         }
 

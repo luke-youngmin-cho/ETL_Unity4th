@@ -1,10 +1,19 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Platformer.FSM.Character
 {
     public class Dash : CharacterStateBase
     {
         public override CharacterStateID id => CharacterStateID.Dash;
+
+        public override bool canExecute => base.canExecute &&
+                                           (machine.currentStateID == CharacterStateID.Idle ||
+                                            machine.currentStateID == CharacterStateID.Move ||
+                                            machine.currentStateID == CharacterStateID.Jump ||
+                                            machine.currentStateID == CharacterStateID.DoubleJump ||
+                                            machine.currentStateID == CharacterStateID.DownJump ||
+                                            machine.currentStateID == CharacterStateID.Fall ||
+                                            machine.currentStateID == CharacterStateID.Crouch);
 
         private float _distance;
         private Vector3 _startPosition;

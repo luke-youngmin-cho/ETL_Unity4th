@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using UnityEngine;
 using CharacterController = Platformer.Controllers.CharacterController;
 
@@ -18,6 +18,7 @@ namespace Platformer.FSM
         Hurt,
         Die,
         Attack,
+        DashAttack,
         WallSlide,
         Edge,
         EdgeClimb,
