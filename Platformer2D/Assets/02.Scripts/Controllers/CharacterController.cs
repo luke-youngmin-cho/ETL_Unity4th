@@ -212,7 +212,15 @@ namespace Platformer.Controllers
         public bool hasDoubleJumped;
         protected CharacterMachine machine;
 
-        public PoolOfDamagePopUp poolOfDamagePopUp;
+
+        public virtual void SetUp()
+        {
+            hpValue = hpMax;
+            var renderer = GetComponentInChildren<SpriteRenderer>();
+            Color color = renderer.color;
+            color.a = 1.0f;
+            renderer.color = color;
+        }
 
         public void Knockback(Vector2 force)
         {
@@ -347,11 +355,7 @@ namespace Platformer.Controllers
         public virtual void DepleteHp(object subject, float amount)
         {
             hpValue -= amount;
-            onHpDepleted?.Invoke(amount);
-
-            DamagePopUp damagePopUp = poolOfDamagePopUp.pool.Get();
-            damagePopUp.transform.position = transform.position + Vector3.up * 0.5f;
-            damagePopUp.Show(amount);
+            onHpDepleted?.Invoke(amount);            
         }
     }
 }

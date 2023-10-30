@@ -1,19 +1,13 @@
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace Platformer.Effects
+namespace Platformer.GameElements
 {
-    public class PoolOfDamagePopUp : MonoBehaviour
+    public class GameObjectPool : MonoBehaviour
     {
         public class PooledItem : MonoBehaviour
         {
-            public IObjectPool<DamagePopUp> pool;
-            private DamagePopUp _damagePopUp;
-
-            private void Awake()
-            {
-                _damagePopUp = GetComponent<DamagePopUp>();
-            }
+            public IObjectPool<GameObject> pool;
 
             private void OnDisable()
             {
@@ -22,7 +16,7 @@ namespace Platformer.Effects
 
             public void ReturnToPool()
             {
-                pool.Release(_damagePopUp);
+                pool.Release(gameObject);
                 Debug.Log($"Returned to pool");
             }
         }
@@ -35,14 +29,14 @@ namespace Platformer.Effects
         [SerializeField] private PoolType _collectionType;
         [SerializeField] private bool _collectionCheck;
 
-        public IObjectPool<DamagePopUp> pool
+        public IObjectPool<GameObject> pool
         {
             get
             {
                 if (_pool == null)
                 {
                     if (_collectionType == PoolType.Stack)
-                        _pool = new ObjectPool<DamagePopUp>(CreatePooledItem,
+                        _pool = new ObjectPool<GameObject>(CreatePooledItem,
                                                             OnGetFromPool,
                                                             OnReturnToPool,
                                                             OnDestroyPooledItem,
@@ -50,7 +44,7 @@ namespace Platformer.Effects
                                                             _count,
                                                             _countMax);
                     else
-                        _pool = new LinkedPool<DamagePopUp>(CreatePooledItem,
+                        _pool = new LinkedPool<GameObject>(CreatePooledItem,
                                                             OnGetFromPool,
                                                             OnReturnToPool,
                                                             OnDestroyPooledItem,
@@ -60,31 +54,31 @@ namespace Platformer.Effects
                 return _pool;
             }
         }
-        private IObjectPool<DamagePopUp> _pool;
-        [SerializeField] private DamagePopUp _prefab;
+        private IObjectPool<GameObject> _pool;
+        [SerializeField] private GameObject _prefab;
         [SerializeField] private int _count;
         [SerializeField] private int _countMax;
 
-        private DamagePopUp CreatePooledItem()
+        private GameObject CreatePooledItem()
         {
-            DamagePopUp item = Instantiate(_prefab);
+            GameObject item = Instantiate(_prefab);
             item.gameObject.AddComponent<PooledItem>().pool = pool;
             return item;
         }
 
-        private void OnGetFromPool(DamagePopUp damagePopUp)
+        private void OnGetFromPool(GameObject gameObject)
         {
-            damagePopUp.gameObject.SetActive(true);
+            gameObject.SetActive(true);
         }
 
-        private void OnReturnToPool(DamagePopUp damagePopUp)
+        private void OnReturnToPool(GameObject gameObject)
         {
-            damagePopUp.gameObject.SetActive(false);
+            gameObject.SetActive(false);
         }
 
-        private void OnDestroyPooledItem(DamagePopUp damagePopUp)
+        private void OnDestroyPooledItem(GameObject gameObject)
         {
-            Destroy(damagePopUp.gameObject);
+            Destroy(gameObject);
         }
     }
 }
