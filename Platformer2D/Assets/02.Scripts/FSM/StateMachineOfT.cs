@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using CharacterController = Platformer.Controllers.CharacterController;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,6 +57,16 @@ namespace Platformer.FSM
             currentStateID = newStateID; // 상태 갱신
             states[currentStateID].OnStateEnter(); // 새로운 상태로 진입
             return true;
+        }
+
+        public void ChangeStateForcely(T newStateID)
+        {
+            if (Comparer<T>.Default.Compare(currentStateID, default) != 0)
+                states[currentStateID].OnStateExit();
+
+            previousStateID = currentStateID;
+            currentStateID = newStateID;
+            states[currentStateID].OnStateEnter();
         }
     }
 }

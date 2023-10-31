@@ -17,7 +17,6 @@ namespace Platformer.FSM.Character
             controller.isDirectionChangeable = false;
             controller.isMovable = false;
             controller.Stop();
-            controller.enabled = false;
             trigger.enabled = false;
             animator.Play("Die");
         }
@@ -30,7 +29,7 @@ namespace Platformer.FSM.Character
                 return id;
 
             if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
-                controller.gameObject.SetActive(false);
+                transform.gameObject.SetActive(false);
 
             return nextID;
         }

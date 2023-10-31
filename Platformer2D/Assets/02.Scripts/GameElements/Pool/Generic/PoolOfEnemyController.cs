@@ -1,6 +1,6 @@
 using Platformer.Controllers;
 
-namespace Platformer.GameElements
+namespace Platformer.GameElements.Pool.Generic
 {
     public class PoolOfEnemyController : GameObjectPool<EnemyController>
     {

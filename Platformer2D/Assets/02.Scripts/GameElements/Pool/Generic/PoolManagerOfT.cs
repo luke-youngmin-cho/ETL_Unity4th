@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine.Pool;
 using UnityEngine;
 
-namespace Platformer.GameElements
+namespace Platformer.GameElements.Pool.Generic
 {
     public class PoolManager<T>
         where T : MonoBehaviour

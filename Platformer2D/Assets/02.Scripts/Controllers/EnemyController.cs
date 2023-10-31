@@ -1,6 +1,6 @@
 using Platformer.Effects;
 using Platformer.FSM;
-using Platformer.GameElements;
+using Platformer.GameElements.Pool;
 using Platformer.Stats;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,6 +41,12 @@ namespace Platformer.Controllers
 
         private CapsuleCollider2D _trigger;
 
+        public override void SetUp()
+        {
+            base.SetUp();
+            _trigger.enabled = true;
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -57,6 +63,10 @@ namespace Platformer.Controllers
 
         private void UpdateAI()
         {
+            if (machine.currentStateID == CharacterStateID.Hurt ||
+                machine.currentStateID == CharacterStateID.Die)
+                return;
+
             // 자동 따라가기 옵션이 켜져있는데
             if (_autoFollow)
             {
@@ -193,11 +203,7 @@ namespace Platformer.Controllers
             // DamagePopUp Pool 들을 관리하는 매니저를통해서
             // Enemy 용 DamagePopUp Pool 을 가져오고 
             // 가져온 Enemy 용 DamagePopUp Pool 에서 Item 을 가져온거
-            DamagePopUp damagePopUp = PoolManager<DamagePopUp>.instance
-                                        .GetPool<DamagePopUp>(PoolTag.DamagePopUP_Enemy)
-                                        .Get();
-
-             //= PoolManager<DamagePopUp>.instance.Get<DamagePopUp>(PoolTag.DamagePopUP_Enemy);
+            DamagePopUp damagePopUp = PoolManager.instance.Get<DamagePopUp>(PoolTag.DamagePopUP_Enemy);
             damagePopUp.transform.position = transform.position + Vector3.up * 0.5f;
             damagePopUp.Show(amount);
         }

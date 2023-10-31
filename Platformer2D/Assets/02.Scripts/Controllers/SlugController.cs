@@ -4,9 +4,9 @@ namespace Platformer.Controllers
 {
     public class SlugController : EnemyController
     {
-        protected override void Start()
+        protected override void Awake()
         {
-            base.Start();
+            base.Awake();
             machine = new EnemyMachine(this);
             var machineData = StateMachineDataSheet.GetSlugData(machine);
             machine.Init(machineData);

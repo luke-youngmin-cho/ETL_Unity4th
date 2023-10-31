@@ -1,42 +1,13 @@
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace Platformer.GameElements
+namespace Platformer.GameElements.Pool.Generic
 {
-    public enum PoolTag
-    {
-        None,
-        DamagePopUp_Player,
-        DamagePopUP_Enemy,
-        Enemy_Slug,
-    }
-
+    
     public class GameObjectPool<T> : MonoBehaviour
         where T : MonoBehaviour
     {
         new public PoolTag tag;
-
-        public class PooledItem : MonoBehaviour
-        {
-            public IObjectPool<T> pool;
-            private T _item;
-
-            private void Awake()
-            {
-                _item = GetComponent<T>();
-            }
-
-            private void OnDisable()
-            {
-                ReturnToPool();
-            }
-
-            public void ReturnToPool()
-            {
-                pool.Release(_item);
-                Debug.Log($"Returned to pool");
-            }
-        }
 
         public enum PoolType
         {
@@ -76,16 +47,10 @@ namespace Platformer.GameElements
         [SerializeField] private int _count;
         [SerializeField] private int _countMax;
 
-        private void Awake()
-        {
-            PoolManager<T>.instance.Register(tag, pool);
-        }
-
 
         protected virtual T CreatePooledItem()
         {
             T item = Instantiate(_prefab);
-            item.gameObject.AddComponent<PooledItem>().pool = pool;
             return item;
         }
 
