@@ -160,7 +160,7 @@ namespace Platformer.FSM.Character
                 nextID = CharacterStateID.Idle;
 
             if (controller.isGrounded)
-                controller.move = new Vector2(controller.horizontal * 0.1f, 0.0f);
+                controller.move = new Vector2(controller.horizontal * controller.moveSpeed * 0.1f, 0.0f);
 
             return nextID;
         }

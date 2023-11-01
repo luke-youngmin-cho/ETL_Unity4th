@@ -25,6 +25,11 @@ namespace Platformer.GameElements
             StartCoroutine(SpawnAll());
         }
 
+        private void OnApplicationQuit()
+        {
+            StopAllCoroutines();
+        }
+
         private void OnDisable()
         {
             StopAllCoroutines();

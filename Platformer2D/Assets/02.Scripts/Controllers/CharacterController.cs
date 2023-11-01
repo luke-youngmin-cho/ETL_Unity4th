@@ -220,7 +220,6 @@ namespace Platformer.Controllers
             Color color = renderer.color;
             color.a = 1.0f;
             renderer.color = color;
-            machine.ChangeStateForcely(CharacterStateID.Idle);
         }
 
         public void Knockback(Vector2 force)
@@ -245,6 +244,11 @@ namespace Platformer.Controllers
         protected virtual void Start()
         {
             
+        }
+
+        private void OnDisable()
+        {
+            machine.ChangeStateForcely(CharacterStateID.Idle);
         }
 
         protected virtual void Update()
