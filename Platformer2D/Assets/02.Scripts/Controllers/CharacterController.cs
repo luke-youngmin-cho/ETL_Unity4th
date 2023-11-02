@@ -42,7 +42,7 @@ namespace Platformer.Controllers
                 onDirectionChanged?.Invoke(_direction);
             }
         }
-        private int _direction;
+        private int _direction = DIRECTION_RIGHT;
         public event Action<int> onDirectionChanged;
         public bool isDirectionChangeable;
 

@@ -136,7 +136,7 @@
                 "m_Node": {
                     "m_Id": "621c7e224e5547049a3c141b0180421d"
                 },
-                "m_SlotId": 3
+                "m_SlotId": 0
             },
             "m_InputSlot": {
                 "m_Node": {
@@ -150,7 +150,7 @@
                 "m_Node": {
                     "m_Id": "621c7e224e5547049a3c141b0180421d"
                 },
-                "m_SlotId": 4
+                "m_SlotId": 2
             },
             "m_InputSlot": {
                 "m_Node": {
@@ -253,7 +253,7 @@
     },
     "m_Path": "Sub Graphs",
     "m_GraphPrecision": 1,
-    "m_PreviewMode": 2,
+    "m_PreviewMode": 1,
     "m_OutputNode": {
         "m_Id": "89a8854637ec4f1182f398718890fede"
     },

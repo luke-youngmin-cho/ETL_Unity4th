@@ -32,7 +32,7 @@ namespace Platformer.Controllers
         [SerializeField] private bool _autoFollow;
         [SerializeField] private bool _attackEnabled;
         [SerializeField] private float _attackRange;
-        [SerializeField] private LayerMask _targetMask;
+        [SerializeField] protected LayerMask _targetMask;
         [SerializeField] private List<CharacterStateID> _behaviours;
         [SerializeField] private float _behaviourTimeMin;
         [SerializeField] private float _behaviourTimeMax;
