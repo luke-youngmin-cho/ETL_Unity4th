@@ -1,3 +1,5 @@
+using Platformer.GameElements.Pool;
+using System.Runtime.CompilerServices;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -55,7 +57,11 @@ public class ParticleSystemPool : MonoBehaviour
         }
     }
     [SerializeField] private ParticleSystem _prefab;
-
+    [SerializeField] private PoolTag _poolTag;
+    private void Awake()
+    {
+        ParticleSystemPoolManager.instance.Register(_poolTag, Pool);
+    }
 
     ParticleSystem CreatePooledItem()
     {
