@@ -26,7 +26,8 @@ namespace Platformer.GameElements.Pool
         /// </summary>
         public void Register(PoolTag tag, IObjectPool<GameObject> pool)
         {
-            _pools.Add(tag, pool);
+            if (_pools.ContainsKey(tag) == false)
+                _pools.Add(tag, pool);
         }
 
         /// <summary>
