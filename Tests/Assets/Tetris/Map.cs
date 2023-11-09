@@ -1,32 +1,26 @@
 namespace Test.Testris
 {
-    public class Map
+    public static class Map
     {
-        public int[,] nodes;
-        public Block current;
+        public static int[,] nodes;
+        public static Block current;
 
-        public bool MoveDown()
+        public static bool TryMove(Coord dir)
         {
-            int expectedOriginY = current.originY + 1;
-            int expectedOriginX = current.originX;
+            Coord expectedOrigin = current.origin + dir;
 
-            for (int i = 0; i < current.coords.Length; i++)
+            for (int i = 0; i < current.localCoords.Length; i++)
             {
-                Coord expected = current.coords[i];
+                Coord expected = expectedOrigin + current.localCoords[i];
                 if (nodes[expected.y, expected.x] > 0)
                 {
                     return false;
                 }
             }
 
-            current.originY = expectedOriginY;
-            current.originX = expectedOriginX;
+            current.origin = expectedOrigin;
             return true;
         }
 
-        public void CheckValid()
-        {
-
-        }
     }
 }

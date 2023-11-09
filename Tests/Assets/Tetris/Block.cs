@@ -2,10 +2,9 @@ namespace Test.Testris
 {
     public abstract class Block
     {
-        public Coord[] coords => patterns[_currentPattern];
+        public Coord[] localCoords => patterns[_currentPattern];
 
-        public int originX;
-        public int originY;
+        public Coord origin;
         public Coord[][] patterns;
         public int currentPattern
         {
