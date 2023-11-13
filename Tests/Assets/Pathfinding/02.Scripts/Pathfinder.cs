@@ -7,6 +7,19 @@ public class Pathfinder : MonoBehaviour
 {
     public Vector2 destination;
     [SerializeField] private LayerMask _pathMask;
+    public IEnumerable<Vector2> path;
+
+    private void Start()
+    {
+        if (TryGetDFSPath(out path))
+        {
+
+        }
+        else
+        {
+            Debug.LogWarning($"[Pathfinder] : DFS 탐색 실패");
+        }
+    }
 
     public bool TryGetDFSPath(out IEnumerable<Vector2> path)
     {
@@ -33,7 +46,7 @@ public class Pathfinder : MonoBehaviour
             // 탐색완료
             if (current == end)
             {
-                path = null;
+                path = BacktrackPath(start, end, pairs);
                 return true;
             }
             else
@@ -64,6 +77,27 @@ public class Pathfinder : MonoBehaviour
 
         path = null;
         return false;
+    }
+
+    private static List<Vector2> BacktrackPath(Coord start, Coord end, List<Pair> pairs)
+    {
+        List<Vector2> path = new List<Vector2>();
+
+        int index = pairs.FindLastIndex(pair => pair.child == end);
+
+        if (index < 0)
+            throw new Exception("[Pathfinder] : 경로 역추적 실패. 올바르지않은 탐색");
+
+        path.Add(MapInfo.CoordToVector(pairs[index].child));
+        while (index > 0 &&
+               pairs[index].parent != start)
+        {
+            path.Add(MapInfo.CoordToVector(pairs[index].parent));
+            index = pairs.FindLastIndex(pair => pair.child == pairs[index].parent);
+        }
+        path.Add(MapInfo.CoordToVector(start));
+        path.Reverse();
+        return path;
     }
 
 }
