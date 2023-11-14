@@ -41,6 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: PathPreview
+    uniqueID: 2856146563
+    locked: 0
   - name: Enemy
     uniqueID: 2817512683
     locked: 0
