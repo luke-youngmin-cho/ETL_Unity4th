@@ -65,6 +65,17 @@ namespace Attributes
             legoStore.CreatorTotal = 3;
             legoStore.CityTotal = 3;
 
+
+            GoldUI ui = new GoldUI();
+
+            while (true)
+            {
+                string input = Console.ReadLine();
+
+                GoldViewModel.Instance.Value = Int32.Parse(input);
+
+                Console.WriteLine(ui.text);
+            }
         }
     }
 }
