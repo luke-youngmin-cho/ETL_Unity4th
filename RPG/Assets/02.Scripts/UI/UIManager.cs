@@ -24,6 +24,7 @@ namespace RPG.UI
             Type type = ui.GetType();
             if (uis.TryAdd(type, ui) == false)
                 throw new Exception($"[UIManager] : {type} already registered but you tried to add it again..!");
+            Debug.Log($"[UIManager] : Registered {type}.");
         }
 
         public void Push(IUI ui)
@@ -35,7 +36,7 @@ namespace RPG.UI
 
             // 가장뒤에있던 UI 보다 뒤로 보내기 
             int sortingOrder = 0;
-            if (showns.Last.Value != null)
+            if (showns.Last?.Value != null)
             {
                 sortingOrder = showns.Last.Value.sortingOrder + 1;
                 showns.Last.Value.inputActionEnabled = false;
