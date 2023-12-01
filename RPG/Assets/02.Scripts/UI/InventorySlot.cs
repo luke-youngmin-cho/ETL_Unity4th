@@ -9,6 +9,7 @@ namespace RPG.UI
 {
     public class InventorySlot : MonoBehaviour
     {
+        public Sprite itemIcon => _itemIcon.sprite;
         public int slotID;
         [SerializeField] private Image _itemIcon;
         [SerializeField] private TMP_Text _itemNum;

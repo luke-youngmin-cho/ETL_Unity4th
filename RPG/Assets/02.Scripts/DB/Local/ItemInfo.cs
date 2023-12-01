@@ -9,5 +9,6 @@ namespace RPG.DB.Local
         [field: SerializeField] public string description { get; private set; }
         [field: SerializeField] public Sprite icon { get; private set; }
         [field: SerializeField] public int maxNum { get; private set; }
+        [field: SerializeField] public GameObject pickableItemPrefab { get; private set; }
     }
 }

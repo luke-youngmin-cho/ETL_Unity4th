@@ -17,3 +17,5 @@ MonoBehaviour:
   <icon>k__BackingField: {fileID: 21300000, guid: c9be1148cd022da4ba44abffd576cf53,
     type: 3}
   <maxNum>k__BackingField: 99
+  <pickableItemPrefab>k__BackingField: {fileID: 7910221666596886293, guid: 51ed75b037eecc344adf052ec9bce659,
+    type: 3}

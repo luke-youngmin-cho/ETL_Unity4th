@@ -36,6 +36,11 @@ namespace RPG.Collections.ObjectModel
         public event Action<int, T> OnItemChanged;
         public event Action OnCollectionChanged;
 
+        public bool Contains(int id)
+        {
+            return Items.ContainsKey(id);
+        }
+
         public void Change(int id, T item)
         {
             if (Items.TryGetValue(id, out Pair<T> pair))

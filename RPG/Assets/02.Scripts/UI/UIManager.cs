@@ -51,6 +51,8 @@ namespace RPG.UI
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.Confined;
             }
+
+            Debug.Log($"{ui} is top.");
         }
 
         public void Pop(IUI ui)
@@ -67,6 +69,8 @@ namespace RPG.UI
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
             }
+
+            Debug.Log($"{showns.Last.Value} is top.");
         }
 
         public void HideLast()

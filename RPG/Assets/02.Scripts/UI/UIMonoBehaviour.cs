@@ -2,6 +2,7 @@ using RPG.EventSystems;
 using RPG.GameSystems;
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace RPG.UI
@@ -19,7 +20,7 @@ namespace RPG.UI
         public event Action onHide;
 
         protected Canvas canvas;
-
+        [SerializeField] private bool _hideWhenPointerDownOutside;
 
         public virtual void InputAction()
         {
@@ -58,12 +59,36 @@ namespace RPG.UI
         {
             canvas = GetComponent<Canvas>();
             UIManager.instance.Register(this);
+
+            if (_hideWhenPointerDownOutside)
+                CreateOutsidePanel();
         }
 
         private void Update()
         {
             if (inputActionEnabled)
                 InputAction();
+        }
+
+        private void CreateOutsidePanel()
+        {
+            GameObject outsidePanel = new GameObject("Outside");
+            outsidePanel.transform.SetParent(transform);
+            outsidePanel.transform.SetAsFirstSibling();
+            Image image = outsidePanel.AddComponent<Image>();
+            image.color = new Color(0f, 0f, 0f, 0.5f);
+
+            RectTransform rectTransform = outsidePanel.GetComponent<RectTransform>();
+            rectTransform.anchorMin = Vector2.zero;
+            rectTransform.anchorMax = Vector2.one;
+            rectTransform.pivot = new Vector2(0.5f, 0.5f);
+            rectTransform.localScale = Vector3.one;
+
+            EventTrigger trigger = outsidePanel.AddComponent<EventTrigger>();
+            EventTrigger.Entry entry = new EventTrigger.Entry();
+            entry.eventID = EventTriggerType.PointerDown;
+            entry.callback.AddListener(eventData => Hide());
+            trigger.triggers.Add(entry);
         }
     }
 }
