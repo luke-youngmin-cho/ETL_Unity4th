@@ -1,3 +1,4 @@
+using RPG.Singleton;
 using RPG.UI;
 using System;
 using System.Collections;
@@ -6,7 +7,7 @@ using UnityEngine;
 
 namespace RPG.EventSystems
 {
-    public class InputSystem : MonoBehaviour
+    public class InputSystem : SingletonMonoBase<InputSystem>
     {
         public class Map
         {
@@ -76,8 +77,9 @@ namespace RPG.EventSystems
         public Dictionary<string, Map> maps = new Dictionary<string, Map>();
         public string current;
 
-        private void Start()
+        protected override void Init()
         {
+            base.Init();
             Map playerMap = new Map();
             playerMap.RegisterKeyDownAction(KeyCode.I, () =>
             {
