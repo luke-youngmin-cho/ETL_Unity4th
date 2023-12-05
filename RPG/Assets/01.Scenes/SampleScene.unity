@@ -1226,8 +1226,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.014102314, y: -0.07088194, z: 0.0010022207, w: 0.99738455}
-  m_LocalPosition: {x: -2.590426, y: 2.7010999, z: -4.057}
+  m_LocalRotation: {x: 0.014102382, y: -0.070881955, z: 0.0010022257, w: 0.99738455}
+  m_LocalPosition: {x: 24.150051, y: 11.590269, z: 41.899994}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1494,8 +1494,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 350062709}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.014102314, y: -0.07088194, z: 0.0010022207, w: 0.99738455}
-  m_LocalPosition: {x: -2.590426, y: 2.7010999, z: -4.057}
+  m_LocalRotation: {x: 0.014102382, y: -0.070881955, z: 0.0010022257, w: 0.99738455}
+  m_LocalPosition: {x: 24.150051, y: 11.590269, z: 41.899994}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1685,15 +1685,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4108094501502716, guid: fb512df7f0d205849b911915fa02931b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.090426
+      value: 23.650051
       objectReference: {fileID: 0}
     - target: {fileID: 4108094501502716, guid: fb512df7f0d205849b911915fa02931b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.109
+      value: 9.998169
       objectReference: {fileID: 0}
     - target: {fileID: 4108094501502716, guid: fb512df7f0d205849b911915fa02931b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.557
+      value: 45.399994
       objectReference: {fileID: 0}
     - target: {fileID: 4108094501502716, guid: fb512df7f0d205849b911915fa02931b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1728,6 +1728,11 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: f09ad60fbfe46fc409c9fef5c4d27f41, type: 2}
+    - target: {fileID: 95887088631907502, guid: fb512df7f0d205849b911915fa02931b,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -1776,9 +1781,9 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3.5
-  m_Acceleration: 8
+  m_Acceleration: 25
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 360
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -2981,6 +2986,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 822683853}
   m_CullTransparentMesh: 1
+--- !u!1 &824953615
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 824953617}
+  - component: {fileID: 824953616}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &824953616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824953615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c11ae0b9a9020ce4e9f3b46b6bf62e9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _agent: {fileID: 461370677}
+--- !u!4 &824953617
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824953615}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &828894031
 GameObject:
   m_ObjectHideFlags: 0
@@ -3326,7 +3376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6043bde05a7fc4cba197d06915c1e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damping: {x: 0.1, y: 0.5, z: 0.3}
+  Damping: {x: 1, y: 2, z: 1.2}
   ShoulderOffset: {x: 0.5, y: -0.4, z: 0}
   VerticalArmLength: 0.5
   CameraSide: 1
@@ -49057,3 +49107,4 @@ SceneRoots:
   - {fileID: 509105168}
   - {fileID: 61259068}
   - {fileID: 642701329}
+  - {fileID: 824953617}
