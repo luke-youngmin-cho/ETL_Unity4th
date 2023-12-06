@@ -69,8 +69,6 @@ namespace RPG.UI
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
             }
-
-            Debug.Log($"{showns.Last.Value} is top.");
         }
 
         public void HideLast()

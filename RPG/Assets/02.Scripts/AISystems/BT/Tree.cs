@@ -12,11 +12,6 @@ namespace RPG.AISystems.BT
         public Root root;
         public bool isBusy;
 
-        private void Start()
-        {
-            blackboard = new Blackboard(this);
-            root = new Root(this);
-        }
 
         private void Update()
         {
@@ -52,6 +47,9 @@ namespace RPG.AISystems.BT
 
         public Tree StartBuild()
         {
+            blackboard = new Blackboard(this);
+            stack = new Stack<Node>();
+            root = new Root(this);
             _current = root;
             _compositeStack = new Stack<Composite>();
             return this;
@@ -78,6 +76,22 @@ namespace RPG.AISystems.BT
         public Tree Execution(Func<Result> execute)
         {
             Node node = new Execution(this, execute);
+            Attach(_current, node);
+            _current = _compositeStack.Count > 0 ? _compositeStack.Peek() : null;
+            return this;
+        }
+
+        public Tree CanSeeObject(float radius, float angle, LayerMask targetMask, Vector3 offset)
+        {
+            Node node = new CanSeeObject(this, radius, angle, targetMask, offset);
+            Attach(_current, node);
+            _current = _compositeStack.Count > 0 ? _compositeStack.Peek() : null;
+            return this;
+        }
+
+        public Tree Seek(float distanceLimit)
+        {
+            Node node = new Seek(this, distanceLimit);
             Attach(_current, node);
             _current = _compositeStack.Count > 0 ? _compositeStack.Peek() : null;
             return this;
