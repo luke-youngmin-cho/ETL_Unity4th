@@ -17,8 +17,8 @@ namespace RPG.Controllers
                 .RegisterKeyDownAction(KeyCode.LeftShift, () => moveGain = 4.0f);
             InputSystem.instance.maps["Player"]
                 .RegisterKeyUpAction(KeyCode.LeftShift, () => moveGain = 2.0f);
-            InputSystem.instance.maps["Player"]
-                .RegisterKeyDownAction(KeyCode.Space, () => ChangeState(State.Jump));
+            //InputSystem.instance.maps["Player"]
+            //    .RegisterKeyDownAction(KeyCode.Space, () => ChangeState(State.Jump));
 
             moveGain = 2.0f;
         }
