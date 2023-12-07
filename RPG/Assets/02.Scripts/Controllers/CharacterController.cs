@@ -1,4 +1,5 @@
 using RPG.Animations;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -10,10 +11,11 @@ namespace RPG.Controllers
         Locomotion,
         Jump,
         Fall,
+        Attack = 20,
     }
 
     [RequireComponent(typeof(Rigidbody))]
-    public class CharacterController : MonoBehaviour
+    public class CharacterController : NetworkBehaviour
     {
         public bool aiOn
         {
@@ -32,14 +34,22 @@ namespace RPG.Controllers
         }
 
         public State state;
-        public virtual float horizontal { get; set; }
-        public virtual float vertical { get; set; }
+        public virtual float horizontal
+        {
+            get => _horizontal.Value;
+            set => _horizontal.Value = value;
+        }
+        public virtual float vertical
+        {
+            get => _vertical.Value;
+            set => _vertical.Value = value;
+        }
         public virtual float moveGain
         {
-            get => _moveGain;
+            get => _moveGain.Value;
             set
             {
-                _moveGain = value;
+                _moveGain.Value = value;
 
                 if (_aiOn)
                     _agent.speed = value;
@@ -53,7 +63,9 @@ namespace RPG.Controllers
         }
 
         private bool _aiOn;
-        private float _moveGain;
+        private NetworkVariable<float> _horizontal = new NetworkVariable<float>(0.0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        private NetworkVariable<float> _vertical = new NetworkVariable<float>(0.0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        private NetworkVariable<float> _moveGain = new NetworkVariable<float>(0.0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private Vector3 _velocity;
         private Vector3 _accel;
         [SerializeField] private float _slopeAngle = 45.0f;
@@ -62,7 +74,7 @@ namespace RPG.Controllers
         private Rigidbody _rigidbody;
         private NavMeshAgent _agent;
 
-        // F = m a  (Èû = Áú·® x °¡¼Óµµ)
+        // F = m a  (íž˜ = ì§ˆëŸ‰ x ê°€ì†ë„)
         public void AddForce(Vector3 force, ForceMode forceMode)
         {
             switch (forceMode)
@@ -106,13 +118,16 @@ namespace RPG.Controllers
 
         protected virtual void Update()
         {
-            if (IsGrounded())
-                velocity = new Vector3(horizontal, 0.0f, vertical).normalized * moveGain;
-
-            if (_aiOn)
+            if (IsOwner)
             {
-                horizontal = Vector3.Dot(transform.right, _agent.velocity);
-                vertical = Vector3.Dot(transform.forward, _agent.velocity);
+                if (IsGrounded())
+                    velocity = new Vector3(horizontal, 0.0f, vertical).normalized * moveGain;
+
+                if (_aiOn)
+                {
+                    horizontal = Vector3.Dot(transform.right, _agent.velocity);
+                    vertical = Vector3.Dot(transform.forward, _agent.velocity);
+                }
             }
 
             _animator.SetFloat("h", horizontal * moveGain);
@@ -120,6 +135,18 @@ namespace RPG.Controllers
         }
 
         private void FixedUpdate()
+        {
+            if (IsOwner)
+                Move();
+        }
+
+        public bool IsGrounded()
+        {
+            Collider[] cols = Physics.OverlapSphere(transform.position, 0.15f, _groundMask);
+            return cols.Length > 0;
+        }
+
+        private void Move()
         {
             if (_aiOn)
             {
@@ -131,11 +158,6 @@ namespace RPG.Controllers
             }
         }
 
-        public bool IsGrounded()
-        {
-            Collider[] cols = Physics.OverlapSphere(transform.position, 0.15f, _groundMask);
-            return cols.Length > 0;
-        }
 
         private void ManualMove()
         {

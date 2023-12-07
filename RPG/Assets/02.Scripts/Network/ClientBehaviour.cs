@@ -24,8 +24,12 @@ public class ClientBehaviour : NetworkBehaviour
         if (!IsOwner)
             return;
 
+
         if (Input.GetKeyDown(KeyCode.Space))
             SubmitJumpServerRpc();
+
+        if (Input.GetMouseButtonDown(0))
+            GetComponent<CharacterController>().ChangeState(RPG.Controllers.State.Attack);
     }
 
     [ServerRpc]
