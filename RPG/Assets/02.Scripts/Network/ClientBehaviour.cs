@@ -19,8 +19,6 @@ public class ClientBehaviour : NetworkBehaviour
 
     private void Update()
     {
-        Debug.Log($"{OwnerClientId}'s count : {count.Value}");
-
         if (!IsOwner)
             return;
 

@@ -1,4 +1,5 @@
 using RPG.Animations;
+using System;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -33,7 +34,6 @@ namespace RPG.Controllers
             }
         }
 
-        public State state;
         public virtual float horizontal
         {
             get => _horizontal.Value;
@@ -62,6 +62,21 @@ namespace RPG.Controllers
             set => _velocity = value;
         }
 
+        public int hp
+        {
+            get => _hp.Value;
+            set
+            {
+                _hp.Value = value;
+            }
+        }
+
+        public int hpMax => _hpMax.Value;
+
+        private NetworkVariable<int> _hp = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        private NetworkVariable<int> _hpMax = new NetworkVariable<int>(100);
+        public event Action<int> onHpChanged;
+        public State state;
         private bool _aiOn;
         private NetworkVariable<float> _horizontal = new NetworkVariable<float>(0.0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private NetworkVariable<float> _vertical = new NetworkVariable<float>(0.0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
@@ -73,6 +88,16 @@ namespace RPG.Controllers
         private Animator _animator;
         private Rigidbody _rigidbody;
         private NavMeshAgent _agent;
+
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+            if (IsOwner)
+            {
+                _hp.Value = hpMax;
+            }
+            _hp.OnValueChanged += (prev, current) => onHpChanged?.Invoke(current);
+        }
 
         // F = m a  (힘 = 질량 x 가속도)
         public void AddForce(Vector3 force, ForceMode forceMode)
