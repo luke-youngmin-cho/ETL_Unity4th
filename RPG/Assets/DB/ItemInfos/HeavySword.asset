@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1265ca1562f95e46a043a2bcbe98b42, type: 3}
+  m_Name: HeavySword
+  m_EditorClassIdentifier: 
+  <id>k__BackingField: 0
+  <description>k__BackingField: 
+  <icon>k__BackingField: {fileID: 0}
+  <maxNum>k__BackingField: 0
+  <pickableItemPrefab>k__BackingField: {fileID: 0}
+  <statModifiers>k__BackingField:
+  - statID: {fileID: 11400000, guid: 66e846425d2d05845b47d4fbe504c461, type: 2}
+    modType: 1
+    value: 30
+  - statID: {fileID: 11400000, guid: e1f80145d63e8c745ab087a24ec9f1ce, type: 2}
+    modType: 1
+    value: 30

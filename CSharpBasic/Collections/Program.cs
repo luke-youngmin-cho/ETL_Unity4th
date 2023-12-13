@@ -332,11 +332,57 @@ namespace Collections
             yield return null;
         }
 
+        // yield return 들을 순회하는 Enumerator 를 
+        // GetEnumerator() 로 가져올 수 있는 IEnumerable 객체 반환
         static IEnumerable NumberEnumerationRoutine()
         {
             yield return 1;
             yield return 2;
             yield return 3;
+        }
+
+        static IEnumerable NumberEnumerationRoutine2()
+        {
+            return new Enumerable();
+        }
+
+        struct Enumerable : IEnumerable
+        {
+            public IEnumerator GetEnumerator()
+            {
+                return new Enumerator();
+            }
+        }
+
+        struct Enumerator : IEnumerator
+        {
+            public object Current => current;
+            object current;
+            int index;
+            public bool MoveNext()
+            {
+                index++;
+                switch (index)
+                {
+                    case 0:
+                        current = 1;
+                        break;
+                    case 1:
+                        current = 2;
+                        break;
+                    case 2:
+                        current = 3;
+                        break;
+                    default:
+                        return false;
+                }
+                return true;
+            }
+
+            public void Reset()
+            {
+                throw new NotImplementedException();
+            }
         }
 
 
