@@ -1,7 +1,7 @@
 Library: C:\Users\etl\nbkim\OneDrive\Documents\GitHub\ETL_Unity4th\NetCodeSample\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
 --platform=Windows
 --backend=burst-llvm-15
---target=X64_SSE2
+--target=AVX2
 --global-safety-checks-setting=Off
 --meta-data-generation=False
 --dump=Function
@@ -34,9 +34,9 @@ Library: C:\Users\etl\nbkim\OneDrive\Documents\GitHub\ETL_Unity4th\NetCodeSample
 --assembly-defines=Unity.Multiplayer.Tools.NetStatsReporting;
 --assembly-defines=Unity.Multiplayer.Tools.MetricEvents;
 --assembly-defines=Unity.Multiplayer.Tools.NetStatsMonitor.Component;
+--assembly-defines=Unity.Collections.LowLevel.ILSupport;
 --assembly-defines=Unity.VisualScripting.Antlr3.Runtime;
 --assembly-defines=Unity.Burst.Unsafe;
---assembly-defines=Unity.Collections.LowLevel.ILSupport;
 --assembly-defines=Newtonsoft.Json;
 --assembly-defines=System.Runtime;
 --assembly-defines=netstandard;
@@ -151,7 +151,7 @@ Library: C:\Users\etl\nbkim\OneDrive\Documents\GitHub\ETL_Unity4th\NetCodeSample
 --method=Unity.Networking.Transport.FragmentationPipelineStage, Unity.Networking.Transport, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::Send(Unity.Networking.Transport.NetworkPipelineContext&, Unity.Networking.Transport, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|Unity.Networking.Transport.InboundSendBuffer&, Unity.Networking.Transport, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|Unity.Networking.Transport.NetworkPipelineStage+Requests&, Unity.Networking.Transport, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)--3134d6572ef8ceff1d5057c9272f12fe
 --platform=Windows
 --backend=burst-llvm-15
---target=AVX2
+--target=X64_SSE2
 --global-safety-checks-setting=Off
 --meta-data-generation=False
 --dump=Function
@@ -184,9 +184,9 @@ Library: C:\Users\etl\nbkim\OneDrive\Documents\GitHub\ETL_Unity4th\NetCodeSample
 --assembly-defines=Unity.Multiplayer.Tools.NetStatsReporting;
 --assembly-defines=Unity.Multiplayer.Tools.MetricEvents;
 --assembly-defines=Unity.Multiplayer.Tools.NetStatsMonitor.Component;
+--assembly-defines=Unity.Collections.LowLevel.ILSupport;
 --assembly-defines=Unity.VisualScripting.Antlr3.Runtime;
 --assembly-defines=Unity.Burst.Unsafe;
---assembly-defines=Unity.Collections.LowLevel.ILSupport;
 --assembly-defines=Newtonsoft.Json;
 --assembly-defines=System.Runtime;
 --assembly-defines=netstandard;

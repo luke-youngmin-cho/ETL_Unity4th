@@ -14,10 +14,8 @@ GameObject:
   - component: {fileID: 5135110220945808309}
   - component: {fileID: 7743601047610829504}
   - component: {fileID: 5092354255975807012}
-  - component: {fileID: 8982473386197383947}
-  - component: {fileID: 533729054058992814}
-  - component: {fileID: 925422595756329408}
   - component: {fileID: 6448829541773852520}
+  - component: {fileID: -7947036884650545712}
   m_Layer: 15
   m_Name: Cube
   m_TagString: Untagged
@@ -158,60 +156,6 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &8982473386197383947
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7950315490488985469}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SyncPositionX: 1
-  SyncPositionY: 1
-  SyncPositionZ: 1
-  SyncRotAngleX: 1
-  SyncRotAngleY: 1
-  SyncRotAngleZ: 1
-  SyncScaleX: 0
-  SyncScaleY: 0
-  SyncScaleZ: 0
-  PositionThreshold: 0.001
-  RotAngleThreshold: 0.01
-  ScaleThreshold: 0.01
-  UseQuaternionSynchronization: 0
-  UseQuaternionCompression: 0
-  UseHalfFloatPrecision: 0
-  InLocalSpace: 0
-  Interpolate: 1
-  SlerpPosition: 0
---- !u!114 &533729054058992814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7950315490488985469}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &925422595756329408
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7950315490488985469}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4d4e2191c9737a4796f597cda5bfeb3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6448829541773852520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,3 +168,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c07772b9567ea8a4d94e196b339f9441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-7947036884650545712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7950315490488985469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 121815cd5cfd73941b22d29980dfdded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _extrapolateGain: 1.5
