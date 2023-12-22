@@ -13864,9 +13864,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   state: 0
   _slopeAngle: 45
+  _step: 0.7
   _groundMask:
     serializedVersion: 2
     m_Bits: 64
+  _leftKnee: {fileID: 7222884195468356083}
+  _rightKnee: {fileID: 1218658868615641156}
+  _footHeight: 0.1
 --- !u!54 &8491952579965415445
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -34,9 +34,9 @@ namespace RPG.Controllers
                 InputSystem.instance.maps["Player"]
                     .RegisterAxisAction("Vertical", (value) => vertical = value);
                 InputSystem.instance.maps["Player"]
-                    .RegisterKeyDownAction(KeyCode.LeftShift, () => moveGain = 4.0f);
+                    .RegisterKeyDownAction(KeyCode.LeftShift, () => moveGain = 2.0f);
                 InputSystem.instance.maps["Player"]
-                    .RegisterKeyUpAction(KeyCode.LeftShift, () => moveGain = 2.0f);
+                    .RegisterKeyUpAction(KeyCode.LeftShift, () => moveGain = 1.0f);
                 //InputSystem.instance.maps["Player"]
                 //    .RegisterKeyDownAction(KeyCode.Space, () => ChangeState(State.Jump));
 

@@ -1,5 +1,6 @@
 using RPG.Animations;
 using System;
+using System.Data;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -84,6 +85,7 @@ namespace RPG.Controllers
         private Vector3 _velocity;
         private Vector3 _accel;
         [SerializeField] private float _slopeAngle = 45.0f;
+        [SerializeField] private float _step = 0.2f;
         [SerializeField] private LayerMask _groundMask;
         private Animator _animator;
         private Rigidbody _rigidbody;
@@ -229,11 +231,28 @@ namespace RPG.Controllers
                               1.0f);
 
                 Debug.Log($"{velocity}, {slopeHeight}");
+
+                // slope
                 if (Physics.Raycast(expected + Vector3.up * slopeHeight,
                                     Vector3.down,
                                     out hit,
                                     2 * slopeHeight,
                                     _groundMask))
+                {
+                    if (NavMesh.SamplePosition(hit.point,
+                                           out navMeshHit,
+                                           1.0f,
+                                           NavMesh.AllAreas))
+                    {
+                        transform.position = navMeshHit.position;
+                    }
+                }
+                // step
+                else if (Physics.Raycast(expected + Vector3.up * _step,
+                                         Vector3.down,
+                                         out hit,
+                                         _step * 2,
+                                         _groundMask))
                 {
                     if (NavMesh.SamplePosition(hit.point,
                                            out navMeshHit,
@@ -251,8 +270,66 @@ namespace RPG.Controllers
             }
         }
 
+        #region Animation
+        [Header("Animation IK")]
+        [SerializeField] private Transform _leftKnee;
+        [SerializeField] private Transform _rightKnee;
+        [SerializeField] private float _footHeight;
+
+        private void OnAnimatorIK(int layerIndex)
+        {
+            if (IsFlatGround() == false)
+                FootIK();
+        }
+
+        private void FootIK()
+        {
+            _animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1);
+            _animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 1);
+            _animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1);
+            _animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 1);
+            Ray ray;
+            RaycastHit hit;
+            Vector3 toward;
+
+            ray = new Ray(_animator.GetIKPosition(AvatarIKGoal.LeftFoot) + Vector3.up, Vector3.down * 2);
+            if (Physics.Raycast(ray, out hit, 2.0f, _groundMask))
+            {
+                _animator.SetIKPosition(AvatarIKGoal.LeftFoot, hit.point + Vector3.up * _footHeight);
+                toward = new Vector3(_leftKnee.forward.x, 0.0f, _leftKnee.forward.z);
+                _animator.SetIKRotation(AvatarIKGoal.LeftFoot, Quaternion.LookRotation(toward, hit.normal));
+            }
+
+            ray = new Ray(_animator.GetIKPosition(AvatarIKGoal.RightFoot) + Vector3.up, Vector3.down * 2);
+            if (Physics.Raycast(ray, out hit, 2.0f, _groundMask))
+            {
+                _animator.SetIKPosition(AvatarIKGoal.RightFoot, hit.point + Vector3.up * _footHeight);
+                toward = new Vector3(_rightKnee.forward.x, 0.0f, _rightKnee.forward.z);
+                _animator.SetIKRotation(AvatarIKGoal.RightFoot, Quaternion.LookRotation(toward, hit.normal));
+            }
+        }
+
+        private Vector3[] _dirPatterns = {Vector3.forward, Vector3.right, Vector3.left, Vector3.back};
+        private bool IsFlatGround()
+        {
+            RaycastHit hit;
+            for (int i = 0; i < _dirPatterns.Length; i++)
+            {
+                Debug.DrawLine(transform.position + _dirPatterns[i] + Vector3.up,
+                               transform.position + _dirPatterns[i] + Vector3.down, Color.cyan, 0.5f);
+                if (Physics.Raycast(transform.position + _dirPatterns[i] + Vector3.up, Vector3.down, out hit, 2.0f, _groundMask))
+                {
+                    Debug.Log($"{transform.position.y}, {hit.point.y}");
+                    if (Mathf.Abs(transform.position.y - hit.point.y) > 0.2)
+                        return false;
+                }
+            }
+            return true;
+        }
+
         private void FootL() { }
         private void FootR() { }
         private void Hit() { }
+        #endregion
     }
 }
