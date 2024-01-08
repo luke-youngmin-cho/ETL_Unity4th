@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Security.Cryptography;
 
 namespace ExtensionMethod
 {
@@ -55,10 +56,17 @@ namespace ExtensionMethod
         }
     }
 
+    public class Column
+    {
+        public int row1;
+        public int row2;
+        public int row3;
+    }
+
+
     // 확장 메서드 
     // 어떤 객체참조를 대상으로 기능을 확장할 때 사용하는 함수 
     // static 클래스내에서 static 메서드를 만들고 기능을확장해야하는 객체참조를 파라미터로 받는다.
-
 
     internal class Program
     {
@@ -80,6 +88,14 @@ namespace ExtensionMethod
             where number > 5
             orderby number descending
             select $"number : {number}";
+
+            Column[] columns = new Column[2];
+            var grouped = from colomn in columns
+                          group colomn by colomn.row1 % 5 into g
+                          select (g.Key, g);
+            foreach (var item in grouped)
+            {
+            }
 
             foreach (string number in filtered)
                 Console.WriteLine(number);

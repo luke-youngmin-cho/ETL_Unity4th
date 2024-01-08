@@ -1,6 +1,8 @@
 using Cinemachine;
+using RPG.Controllers;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 
@@ -22,12 +24,23 @@ public class VCam_FollowingPlayer : MonoBehaviour
     private void Awake()
     {
         _vCam = GetComponent<CinemachineVirtualCamera>();
-        _target = _vCam.Follow;
-        _targetRoot = _target.root;
     }
 
     private void LateUpdate()
     {
+        _target = PlayerController.GetSpawned(NetworkManager.Singleton.LocalClientId)?.transform;
+        if (_target)
+        {
+            _target = _target.Find("CameraTarget");
+            _targetRoot = _target.root;
+            _vCam.Follow = _target;
+            _vCam.LookAt = _target;
+        }
+        else
+        {
+            return;
+        }
+
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
 

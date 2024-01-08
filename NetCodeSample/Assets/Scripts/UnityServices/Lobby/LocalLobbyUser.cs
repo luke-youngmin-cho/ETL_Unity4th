@@ -14,7 +14,7 @@ public class LocalLobbyUser
             if (userData.isHost == value)
                 return;
 
-            userData.isHost = value;
+            _userData.isHost = value;
             onChanged?.Invoke(this);
         }
     }
@@ -27,7 +27,7 @@ public class LocalLobbyUser
             if (userData.displayName == value)
                 return;
 
-            userData.displayName = value;
+            _userData.displayName = value;
             onChanged?.Invoke(this);
         }
     }
@@ -40,7 +40,7 @@ public class LocalLobbyUser
             if (userData.id == value)
                 return;
 
-            userData.id = value;
+            _userData.id = value;
             onChanged?.Invoke(this);
         }
     }
